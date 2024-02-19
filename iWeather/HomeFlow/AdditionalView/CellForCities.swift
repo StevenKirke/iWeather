@@ -14,6 +14,7 @@ final class CellForCities: UICollectionViewCell {
 	static let identifierID = "CellForCities.cell"
 	lazy var labelTitle = createUILabel()
 	lazy var imageBackground = createImage()
+	private var coordinateCity: MainHomeModel.ViewModel.Coordinate?
 
 	// MARK: - Initializator
 	override init(frame: CGRect) {
@@ -25,6 +26,11 @@ final class CellForCities: UICollectionViewCell {
 
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+
+	func reloadData(city: MainHomeModel.ViewModel.City) {
+		self.coordinateCity = city.coordinate
+		self.labelTitle.text = city.title
 	}
 }
 

@@ -68,6 +68,8 @@ final class MainHomeWorker {
 extension MainHomeWorker: IMainHomeWorker {
 
 	func fetchDataCityList(response: @escaping (Result<CitiesDTO, Error>) -> Void) {
+		let citiesURL = assemblerURL?.assemblerUlRsCities()
+		print(citiesURL)
 		fileManager?.getFile(resource: fileName, type: .json) { result in
 			switch result {
 			case .success(let data):
@@ -85,19 +87,20 @@ extension MainHomeWorker: IMainHomeWorker {
 		}
 	}
 
-	/*
+
 	func fetchData() {
-		let citiesURL = assemblerURL?.assemblerUlRsCities()
-		networkManager?.getData(url: citiesURL) { response in
-			switch response {
-			case .success(let data):
-				self.decode(data: data)
-			case .failure(let error):
-				print("Error \(response)")
-			}
-		}
+//		let citiesURL = assemblerURL?.assemblerUlRsCities()
+//		print(citiesURL)
+//		networkManager?.getData(url: citiesURL) { response in
+//			switch response {
+//			case .success(let data):
+//				self.decode(data: data)
+//			case .failure(let error):
+//				print("Error \(response)")
+//			}
+//		}
 	}
-	 */
+
 
 	func fetchDataWeather(
 		cityCoordinate: MainHomeModel.Request.Coordinate,

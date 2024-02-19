@@ -8,10 +8,14 @@
 import UIKit
 import SnapKit
 
+protocol ICitiesCoordinateHandler {
+	func returnCoordinate(latitude: Double, longitude: Double)
+}
+
 final class CitiesCollectionView: UIView {
 
 	// MARK: - Public properties
-
+	var handlerCoordinateDelegate: ICitiesCoordinateHandler?
 	// MARK: - Dependencies
 
 	// MARK: - Private properties
@@ -19,6 +23,12 @@ final class CitiesCollectionView: UIView {
 	private var modelForDisplay: [MainHomeModel.ViewModel.City] = []
 
 	// MARK: - Initializator
+
+	convenience init(handlerCoordinateDelegate: ICitiesCoordinateHandler?) {
+		self.init(frame: CGRect.zero)
+		self.handlerCoordinateDelegate = handlerCoordinateDelegate
+	}
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		addUIView()
@@ -66,8 +76,8 @@ private extension CitiesCollectionView {
 	func setupLayout() {
 		collectionCities.snp.makeConstraints { make in
 			make.top.equalToSuperview()
-			make.left.equalToSuperview().inset(25)
-			make.right.equalToSuperview().inset(25)
+			make.left.equalToSuperview()
+			make.right.equalToSuperview()
 			make.bottom.equalToSuperview()
 		}
 	}
@@ -87,7 +97,7 @@ extension CitiesCollectionView: UICollectionViewDelegateFlowLayout {
 		layout collectionViewLayout: UICollectionViewLayout,
 		insetForSectionAt section: Int
 	) -> UIEdgeInsets {
-		return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+		return UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
 	}
 }
 
@@ -99,14 +109,26 @@ extension CitiesCollectionView: UICollectionViewDataSource, UICollectionViewDele
 
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let city = modelForDisplay[indexPath.item]
+		//print("\(city.title) \(city.coordinate)")
 		if let cell = collectionView.dequeueReusableCell(
 			withReuseIdentifier: CellForCities.identifierID,
 			for: indexPath
 		) as? CellForCities {
-			cell.labelTitle.text = city.title
+			cell.reloadData(city: city)
 			return cell
 		}
 		return UICollectionViewCell()
+	}
+
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		let location = modelForDisplay[indexPath.item]
+		//print("\(location.title) \(location.coordinate)")
+		//print(location.title)
+		//print(location.coordinate)
+		self.handlerCoordinateDelegate?.returnCoordinate(
+			latitude: location.coordinate.latitude,
+			longitude: location.coordinate.longitude
+		)
 	}
 }
 

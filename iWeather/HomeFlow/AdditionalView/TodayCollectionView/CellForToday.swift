@@ -7,19 +7,19 @@
 
 import UIKit
 import SnapKit
-import WebKit
+import SVGKit
 
 final class CellForToday: UICollectionViewCell {
 
 	// MARK: - Public properties
 	static let identifierID = "CellForToday.cell"
+	lazy var imageIcon = createImage()
 	lazy var labelTemperature = createUILabel()
 	lazy var labelTime = createUILabel()
 
 	// MARK: - Private properties
 	private lazy var viewDie = createView()
 	private var safeImage: String = ""
-	private lazy var webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
 
 	// MARK: - Initializator
 	override init(frame: CGRect) {
@@ -33,8 +33,8 @@ final class CellForToday: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	func downloadImage(imageURL: URL) {
-		self.loadImage(url: imageURL)
+	func downloadImage(url: URL) {
+		self.loadImageSVG(url: url)
 	}
 }
 
@@ -42,7 +42,7 @@ final class CellForToday: UICollectionViewCell {
 private extension CellForToday {
 	/// Добавление элементов UIView в Controller.
 	func addUIView() {
-		let views: [UIView] = [viewDie, labelTemperature, labelTime, webView]
+		let views: [UIView] = [viewDie, imageIcon, labelTemperature, labelTime]
 		views.forEach(contentView.addSubview)
 	}
 }
@@ -70,7 +70,7 @@ private extension CellForToday {
 			die.height.equalTo(76)
 		}
 
-		webView.snp.makeConstraints { image in
+		imageIcon.snp.makeConstraints { image in
 			image.top.equalToSuperview().inset(12)
 			image.centerX.equalToSuperview()
 			image.width.height.equalTo(30)
@@ -89,6 +89,35 @@ private extension CellForToday {
 			textTime.right.equalTo(viewDie.snp.right)
 			textTime.height.equalTo(20)
 		}
+	}
+}
+
+private extension CellForToday {
+	func loadImageSVG(url: URL) {
+
+		let writeURL = url.absoluteString
+		if safeImage != writeURL {
+			safeImage = writeURL
+		}
+
+		URLSession.shared.dataTask(with: url) { data, response, error in
+			DispatchQueue.main.async {
+				guard
+					let currentData = data, error == nil,
+					let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200
+					else {
+					return
+				}
+				let receivedImage: SVGKImage? = SVGKImage(data: currentData)
+
+				let currentURL = self.safeImage
+				if writeURL != currentURL {
+					return
+				}
+				guard let convImage = receivedImage else { return }
+				self.imageIcon.image = convImage.uiImage
+			}
+		}.resume()
 	}
 }
 
@@ -124,33 +153,4 @@ private extension CellForToday {
 
 		return view
 	}
-}
-
-private extension CellForToday {
-	func loadImage(url: URL) {
-		let writeURL = url.absoluteString
-		if safeImage != writeURL {
-			safeImage = writeURL
-		}
-	//	URLSession.shared.dataTask(with: url) { data, response, error in
-			DispatchQueue.main.async {
-//				guard
-//					let data = data, error == nil,
-//					let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200
-//					else {
-//					return
-//				}
-				let request = URLRequest(url: url)
-				self.webView.load(request)
-			}
-//		}
-//		.resume()
-	}
-
-	/*
-	 let webView = WKWebView(frame: view.bounds)
-	 let request = URLRequest(url: URL(string: path)!)
-	 webView.load(request)
-	 view.addSubview(webView)
-	 */
 }

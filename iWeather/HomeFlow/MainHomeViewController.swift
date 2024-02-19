@@ -11,6 +11,7 @@ import SnapKit
 protocol IMainHomeViewLogic: AnyObject {
 	func renderCity(viewModel: [MainHomeModel.ViewModel.City])
 	func renderHour(viewModel: [MainHomeModel.ViewModel.Hour])
+	func renderWeatherLocal(viewModel: MainHomeModel.ViewModel.WeatherLocation)
 }
 
 final class MainHomeViewController: UIViewController {
@@ -19,13 +20,14 @@ final class MainHomeViewController: UIViewController {
 
 	// MARK: - Dependencies
 	var iterator: IMainHomeIterator?
+	var handlerDelegate: ICitiesCoordinateHandler?
 
 	// MARK: - Private properties
 	private var collectionCities = CitiesCollectionView()
 	private var collectionTodayTemp = TodayCollectionView()
+	private lazy var headerView = HeaderView()
 
 	private var isCurrentLocation = false
-	private var currentCoordinate: WCoordinate = WCoordinate(latitude: 0, longitude: 0)
 
 	// MARK: - Initializator
 	init() {
@@ -45,14 +47,13 @@ final class MainHomeViewController: UIViewController {
 		super.viewDidLoad()
 		setupConfiguration()
 		addUIView()
+		getListCities()
+		getCurrentLocation()
 	}
 
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		setupLayout()
-
-		getCurrentLocation()
-		getListCities()
 	}
 
 	// MARK: - Private methods
@@ -62,7 +63,11 @@ final class MainHomeViewController: UIViewController {
 private extension MainHomeViewController {
 	/// Добавление элементов UIView в Controller.
 	func addUIView() {
-		let views: [UIView] = [collectionCities, collectionTodayTemp]
+		let views: [UIView] = [
+			headerView,
+			collectionCities,
+			collectionTodayTemp
+		]
 		views.forEach(view.addSubview)
 	}
 }
@@ -73,7 +78,7 @@ private extension MainHomeViewController {
 	func setupConfiguration() {
 		view.backgroundColor = UIColor(hex: "#431098")
 		collectionCities.translatesAutoresizingMaskIntoConstraints = false
-
+		collectionCities.handlerCoordinateDelegate = self
 		collectionTodayTemp.translatesAutoresizingMaskIntoConstraints = false
 	}
 }
@@ -85,7 +90,7 @@ private extension MainHomeViewController {
 	func setupLayout() {
 		collectionCities.snp.makeConstraints { citiesView in
 			citiesView.bottom.equalTo(collectionTodayTemp.snp.top).inset(-63)
-			citiesView.left.right.equalToSuperview()
+			citiesView.left.right.equalToSuperview().inset(25)
 			citiesView.height.equalTo(215)
 		}
 
@@ -94,6 +99,28 @@ private extension MainHomeViewController {
 			todayTempView.left.right.equalToSuperview()
 			todayTempView.height.equalTo(152)
 		}
+
+		headerView.snp.makeConstraints { viewBack in
+			viewBack.top.equalToSuperview()
+			viewBack.left.right.equalToSuperview()
+			viewBack.height.equalTo(381)
+		}
+	}
+}
+
+// - MARK: Fabric UI Element.
+private extension MainHomeViewController {
+	func createGradient() -> CAGradientLayer {
+		let gradient = CAGradientLayer()
+		let colours = [
+			UIColor(hex: "#1B0F36").cgColor,
+			UIColor(hex: "#2F1C78").cgColor,
+			UIColor(hex: "#321E82").cgColor
+		]
+		gradient.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 381)
+		gradient.colors = colours
+
+		return gradient
 	}
 }
 
@@ -101,7 +128,7 @@ private extension MainHomeViewController {
 private extension MainHomeViewController {
 	func getCurrentLocation() {
 		if !isCurrentLocation {
-			iterator?.fetchCurrentLocation()
+			iterator?.fetchCurrentLocation(coordinate: nil)
 		}
 	}
 
@@ -118,5 +145,16 @@ extension MainHomeViewController: IMainHomeViewLogic {
 
 	func renderHour(viewModel: [MainHomeModel.ViewModel.Hour]) {
 		collectionTodayTemp.reloadData(hours: viewModel)
+	}
+
+	func renderWeatherLocal(viewModel: MainHomeModel.ViewModel.WeatherLocation) {
+		headerView.reloadData(model: viewModel)
+	}
+}
+
+extension MainHomeViewController: ICitiesCoordinateHandler {
+	func returnCoordinate(latitude: Double, longitude: Double) {
+		let coord = MainHomeModel.Response.Coordinate(latitude: latitude, longitude: longitude)
+		iterator?.fetchCurrentLocation(coordinate: coord)
 	}
 }

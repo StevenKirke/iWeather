@@ -35,7 +35,8 @@ final class AssemblerURLCities: IAssemblerURLService {
 		components.path = "/v1/forecast"
 		components.queryItems = [
 			 URLQueryItem(name: "lat", value: "\(lat)"),
-			 URLQueryItem(name: "lon", value: "\(lon)")
+			 URLQueryItem(name: "lon", value: "\(lon)"),
+			 URLQueryItem(name: "limit", value: "1")
 		 ]
 		return components.url
 	}

@@ -15,12 +15,31 @@ typealias WCoordinate = MainHomeModel.ViewModel.Coordinate
 
 // swiftlint:disable nesting
 enum MainHomeModel {
-	enum Response { }
+
+	enum Response {
+		case location(Coordinate)
+
+		struct Coordinate {
+			let latitude: Double
+			let longitude: Double
+		}
+	}
 
 	enum Request {
 		case successCities([City])
+		case successCurrentLocation(Location)
 		case successHours([Hour])
 		case failure(Error)
+
+		struct Location {
+			let name: String
+			let data: String
+			let currentTemperature: String
+			let minTemp: String
+			let maxTemp: String
+			let condition: String
+			let icon: String
+		}
 
 		struct City {
 			let cityName: String
@@ -50,6 +69,7 @@ enum MainHomeModel {
 	enum ViewModel {
 		case success([City])
 		case successHours([Hour])
+		case successWeatherLocation([Hour])
 		case failure(Error)
 
 		struct City {
@@ -67,6 +87,14 @@ enum MainHomeModel {
 		struct Coordinate {
 			let latitude: Double
 			let longitude: Double
+		}
+
+		struct WeatherLocation {
+			let name: String
+			let currentTemp: String
+			let condition: String
+			let dateAndTemp: String
+			let icon: URL?
 		}
 	}
 }
@@ -143,5 +171,44 @@ extension MainHomeModel.ViewModel.Hour {
 		dateFormate.dateFormat = "hh:mm a"
 		let string = dateFormate.string(from: convertInDate!)
 		return string
+	}
+}
+
+extension MainHomeModel.Request.Location {
+	init(
+		name: String,
+		dateString: String,
+		currentTemp: String,
+		minTemp: String,
+		maxTemp: String,
+		condition: String,
+		icon: String
+	) {
+		self.init(
+			name: name,
+			data: dateString,
+			currentTemperature: currentTemp,
+			minTemp: minTemp,
+			maxTemp: maxTemp,
+			condition: condition,
+			icon: icon
+		)
+	}
+}
+
+extension MainHomeModel.ViewModel.WeatherLocation {
+	init(
+		name: String,
+		currentTemp: String,
+		condition: String,
+		assembler: String,
+		icon: URL?
+	) {
+		self.init(name: name,
+				  currentTemp: currentTemp,
+				  condition: condition,
+				  dateAndTemp: assembler,
+				  icon: icon
+		)
 	}
 }

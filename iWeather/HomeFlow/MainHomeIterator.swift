@@ -20,7 +20,7 @@ protocol IMainHomeIterator: AnyObject {
 	 */
 	func fetchTemperatureForCity(coordinate: RCoordinate, response: @escaping (Result<Int, Error>) -> Void)
 
-	func fetchCurrentLocation()
+	func fetchCurrentLocation(coordinate: MainHomeModel.Response.Coordinate?)
 }
 
 final class MainHomeIterator {
@@ -32,6 +32,7 @@ final class MainHomeIterator {
 	var worker: IMainHomeWorker?
 
 	// MARK: - Private properties
+	let convertDate = TimeConvertServices()
 
 	// MARK: - Initializator
 	internal init(presenter: IMainHomePresenter?, worker: IMainHomeWorker?) {
@@ -73,14 +74,22 @@ extension MainHomeIterator: IMainHomeIterator {
 		}
 	}
 
-	func fetchCurrentLocation() {
-		Task.init {
-			await self.worker?.fetchCoordinate { responseCurrentCoordinate in
-				switch responseCurrentCoordinate {
-				case .success(let coordinate):
-					self.getWeatherForCurrentLocation(coordinate: coordinate)
-				case .failure(let error):
-					self.presenter?.presentCities(response: .failure(error))
+	func fetchCurrentLocation(coordinate: MainHomeModel.Response.Coordinate?) {
+		if let currentCoordinate = coordinate {
+			let coord: RCoordinate = RCoordinate(
+				latitude: currentCoordinate.latitude,
+				longitude: currentCoordinate.longitude
+			)
+			self.getWeatherForCurrentLocation(coordinate: coord)
+		} else {
+			Task.init {
+				await self.worker?.fetchCoordinate { responseCurrentCoordinate in
+					switch responseCurrentCoordinate {
+					case .success(let coordinate):
+						self.getWeatherForCurrentLocation(coordinate: coordinate)
+					case .failure(let error):
+						self.presenter?.presentCities(response: .failure(error))
+					}
 				}
 			}
 		}
@@ -142,16 +151,82 @@ private extension MainHomeIterator {
 			case .success(let weather):
 				let hours = self.convertHours(forecast: weather.forecasts.first)
 				self.presenter?.presentCities(response: .successHours(hours))
+
+				if let location = self.convertToCurrentLocation(weather: weather) {
+					self.presenter?.presentCities(response: .successCurrentLocation(location))
+				}
 			case .failure(let error):
 				self.presenter?.presentCities(response: .failure(error))
 			}
 		}
 	}
-	private func convertHours(forecast: Forecast?) -> [MainHomeModel.Request.Hour] {
+
+	func convertHours(forecast: Forecast?) -> [MainHomeModel.Request.Hour] {
 		var convertHours: [MainHomeModel.Request.Hour] = []
 		if let currentDay = forecast, let hours = currentDay.hours {
 			convertHours = hours.map { MainHomeModel.Request.Hour(from: $0) }
 		}
 		return convertHours
+	}
+
+	func convertToCurrentLocation(weather: WeatherDTO) -> MainHomeModel.Request.Location? {
+		if let currentForecast = weather.forecasts.first {
+			let dateConvert = convertDateInShort(weather: weather)
+			let minMaxTemp = answerTimesOfDay(dayTime: weather.fact.daytime, parts: currentForecast.parts)
+			let location = MainHomeModel.Request.Location(
+				name: convertNameCity(nameCity: weather.geoObject.locality.name),
+				data: convertDateInShort(weather: weather),
+				currentTemperature: convertToString(weather.fact.temp),
+				minTemp: minMaxTemp.0,
+				maxTemp: minMaxTemp.1,
+				condition: weather.fact.condition.rawValue,
+				icon: convertIconURLString(icon: weather.fact.icon)
+			)
+			return location
+		}
+		return nil
+	}
+
+	func convertIconURLString(icon: String) -> String {
+		"https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg"
+	}
+
+	func convertNameCity(nameCity: String) -> String {
+		let cropSlash = nameCity.components(separatedBy: "/")
+		if let name = cropSlash.last {
+			return croppingText(text: name)
+		}
+		return ""
+	}
+
+	func croppingText(text: String) -> String {
+		text.replacingOccurrences(of: "_", with: " ")
+	}
+
+	func convertDateInShort(weather: WeatherDTO) -> String {
+		if let currentForecast = weather.forecasts.first {
+			return convertDate.convertData(dataString: currentForecast.date)
+		}
+		return ""
+	}
+
+	func answerTimesOfDay(dayTime: Daytime, parts: Parts) -> (String, String) {
+		var minTemp = ""
+		var maxTemp = ""
+
+		switch dayTime {
+		case .d:
+			minTemp = convertToString(parts.day.tempMin)
+			maxTemp = convertToString(parts.day.tempMin)
+		case .n:
+			minTemp = convertToString(parts.night.tempMin)
+			maxTemp = convertToString(parts.night.tempMin)
+		}
+		return (minTemp, maxTemp)
+	}
+
+	func convertToString(_ tempInt: Int?) -> String {
+		guard let temp = tempInt else { return "" }
+		return String(temp)
 	}
 }

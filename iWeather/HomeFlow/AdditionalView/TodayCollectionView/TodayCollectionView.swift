@@ -105,8 +105,8 @@ extension TodayCollectionView: UICollectionViewDataSource, UICollectionViewDeleg
 		) as? CellForToday {
 			cell.labelTemperature.text = hour.temp
 			cell.labelTime.text = hour.hour
-			if let url = URL(string: hour.icon) {
-				cell.downloadImage(imageURL: url)
+			if let currentURL = URL(string: hour.icon) {
+				cell.downloadImage(url: currentURL)
 			}
 			return cell
 		}

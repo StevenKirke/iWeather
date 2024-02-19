@@ -9,14 +9,14 @@ import Foundation
 
 // swiftlint:disable all
 struct WeatherDTO: Decodable {
-	let nowDt: String
 	let fact: FactDTO
+	let geoObject: GeoObject
 	let forecasts: [Forecast]
 
 	enum CodingKeys: String, CodingKey {
-		case nowDt = "now_dt"
 		case fact
 		case forecasts
+		case geoObject = "geo_object"
 	}
 }
 
@@ -24,8 +24,8 @@ struct WeatherDTO: Decodable {
 struct FactDTO: Codable {
 	let temp: Int
 	let icon: String
-	let condition: String
-	let daytime: Daytime?
+	let condition: Condition
+	let daytime: Daytime
 
 	enum CodingKeys: String, CodingKey {
 		case temp
@@ -33,6 +33,14 @@ struct FactDTO: Codable {
 		case condition
 		case daytime
 	}
+}
+
+struct GeoObject: Codable {
+	let locality: Locality
+}
+
+struct Locality: Codable {
+	let name: String
 }
 
 enum Condition: String, Codable {
@@ -44,6 +52,8 @@ enum Condition: String, Codable {
 	case overcastAndRain = "overcast-and-rain"
 	case partlyCloudy = "partly-cloudy"
 	case partlyCloudyAndRain = "partly-cloudy-and-rain"
+	case overcastAndWetSnow = "overcast-and-wet-snow"
+	case overcastAndLightSnow = "overcast-and-light-snow"
 }
 
 enum Daytime: String, Codable {
@@ -54,10 +64,12 @@ enum Daytime: String, Codable {
 // MARK: - Forecast
 struct Forecast: Decodable {
 	let parts: Parts
+	let date: String
 	let hours: [HourDTO]?
 
 	enum CodingKeys: String, CodingKey {
 		case parts
+		case date
 		case hours
 	}
 }
