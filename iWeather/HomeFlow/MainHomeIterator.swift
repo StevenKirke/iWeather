@@ -125,18 +125,18 @@ private extension MainHomeIterator {
 		var tempCities: [MainHomeModel.Request.City] = []
 		for city in cities {
 			group.enter()
-			if var currentCity = convertorCityDTO?.convert(cityDTO: city) {
-				self.fetchTemperatureForCity(coordinate: city.coordinate) { resultTemperature in
-					switch resultTemperature {
-					case .success(let temperature):
-						let temp = temperature
-						currentCity.temperature = temp.0
-						currentCity.condition = temp.1
-					case .failure(let error):
-						currentCity.errorDescription = error.localizedDescription
+			self.fetchTemperatureForCity(coordinate: city.coordinate) { resultTemperature in
+				switch resultTemperature {
+				case .success(let tempAndCondition):
+						if var currentCity = self.convertorCityDTO?.convert(cityDTO: city) {
+						currentCity.temperature = tempAndCondition.0
+						currentCity.condition = tempAndCondition.1
+						currentCity.conditionType = tempAndCondition.1
+						tempCities.append(currentCity)
+						group.leave()
 					}
-					tempCities.append(city)
-					group.leave()
+				case .failure(let error):
+					print("Error")
 				}
 			}
 		}

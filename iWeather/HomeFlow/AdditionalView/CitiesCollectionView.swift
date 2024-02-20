@@ -113,7 +113,11 @@ extension CitiesCollectionView: UICollectionViewDataSource, UICollectionViewDele
 			withReuseIdentifier: CellForCities.identifierID,
 			for: indexPath
 		) as? CellForCities {
-			cell.reloadData(city: city)
+			cell.reloadData(
+				title: city.title,
+				coordinate: city.coordinate,
+				image: UIImage(named: city.conditionType)
+			)
 			return cell
 		}
 		return UICollectionViewCell()

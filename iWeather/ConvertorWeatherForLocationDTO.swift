@@ -26,7 +26,6 @@ final class ConvertorWeatherForLocationDTO: IConvertorWeatherForLocationDTO {
 		minTemp: "",
 		maxTemp: "",
 		condition: "",
-		icon: "",
 		timeOfDay: ""
 	)
 
@@ -56,7 +55,6 @@ private extension ConvertorWeatherForLocationDTO {
 			minTemp: minMaxTemp.minTemp,
 			maxTemp: minMaxTemp.maxTemp,
 			condition: weather.fact.condition.rawValue,
-			icon: convertIconURLString(icon: weather.fact.icon),
 			timeOfDay: weather.fact.daytime.rawValue
 		)
 
@@ -65,11 +63,6 @@ private extension ConvertorWeatherForLocationDTO {
 }
 
 private extension ConvertorWeatherForLocationDTO {
-	// Добавление URL для иконки погоды.
-	func convertIconURLString(icon: String) -> String {
-		"https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg"
-	}
-
 	// Удаление из названия города, лишних знаков.
 	func convertNameCity(nameCity: String) -> String {
 		let cropSlash = nameCity.components(separatedBy: "/")

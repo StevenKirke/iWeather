@@ -19,15 +19,13 @@ final class ConvertorCityDTO: IConvertorCityDTO {
 
 private extension ConvertorCityDTO {
 	func convertDTO(city: MainHomeModel.Request.City) -> MainHomeModel.Request.City {
-		var city = MainHomeModel.Request.City(
+		MainHomeModel.Request.City(
 			cityName: city.cityName,
-			cityNameEng: city.cityNameEng,
 			coordinate: city.coordinate,
 			temperature: 0,
 			condition: "",
 			conditionType: city.conditionType,
 			errorDescription: ""
 		)
-		return city
 	}
 }

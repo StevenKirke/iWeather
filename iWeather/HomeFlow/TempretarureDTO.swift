@@ -38,27 +38,27 @@ extension ConditionDTO {
 		   var title = ""
 		   switch self {
 		   case .clear:
-			   title = "ясно"
+			   title = "Clear"
 		   case .cloudy:
-			   title = "малооблачно"
+			   title = "Cloudy"
 		   case .cloudyAndLightRain:
-			   title = "дождь"
+			   title = "Cloudy and light rain"
 		   case .overcast:
-			   title = "пасмурно"
+			   title = "Overcast"
 		   case .overcastAndLightRain:
-			   title = "дождь"
+			   title = "Overcast and light rain"
 		   case .overcastAndRain:
-			   title = "дождь"
+			   title = "Rain"
 		   case .partlyCloudy:
-			   title = "малооблачно"
+			   title = "Partly cloudy"
 		   case .partlyCloudyAndRain:
-			   title = "дождь"
+			   title = "Cloudy and rain"
 		   case .overcastAndWetSnow:
-			   title = "дождь со снегом"
+			   title = "Wet snow"
 		   case .overcastAndLightSnow:
-			   title = "снег"
+			   title = "Snow"
 		   case .cloudyAndSnow:
-				title = "снег"
+				title = "Snow"
 		   }
 		   return title
 	   }
@@ -67,29 +67,28 @@ extension ConditionDTO {
 		   var title = ""
 		   switch self {
 		   case .clear:
-			   title = "c"
+			   title = "clear"
 		   case .cloudy:
-			   title = "pc"
+			   title = "cloudy"
 		   case .cloudyAndLightRain:
-			   title = "r"
+			   title = "rain"
 		   case .overcast:
-			   title = "pc"
+			   title = "overcast"
 		   case .overcastAndLightRain:
-			   title = "r"
+			   title = "rain"
 		   case .overcastAndRain:
-			   title = "r"
+			   title = "rain"
 		   case .partlyCloudy:
-			   title = "pc"
+			   title = "overcast"
 		   case .partlyCloudyAndRain:
-			   title = "r"
+			   title = "rain"
 		   case .overcastAndWetSnow:
-			   title = "r"
+			   title = "snow"
 		   case .overcastAndLightSnow:
-			   title = "s"
+			   title = "snow"
 		   case .cloudyAndSnow:
-			   title = "s"
+			   title = "snow"
 		   }
 		   return title
 	   }
-
 }

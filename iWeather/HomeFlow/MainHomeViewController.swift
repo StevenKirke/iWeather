@@ -140,7 +140,7 @@ private extension MainHomeViewController {
 // MARK: - Render Logic
 extension MainHomeViewController: IMainHomeViewLogic {
 	func renderCity(viewModel: [MainHomeModel.ViewModel.City]) {
-		collectionCities.reloadData(render: viewModel)
+		return collectionCities.reloadData(render: viewModel)
 	}
 
 	func renderHour(viewModel: [MainHomeModel.ViewModel.Hour]) {

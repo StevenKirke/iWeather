@@ -37,13 +37,13 @@ extension MainHomePresenter: IMainHomePresenter {
 	func presentCities(response: MainHomeModel.Request) {
 		switch response {
 		case .successCities(let cities):
-			let model = convertInModelCity(responseModel: cities)
+			let model = convertInModelListCities(responseModel: cities)
 			viewController?.renderCity(viewModel: model)
 		case .successCurrentLocation(let location):
 			let model = convertInModelLocation(responseModel: location)
 			viewController?.renderWeatherLocal(viewModel: model)
 		case .successHours(let hours):
-			let model = convertInModelHour(responseModel: hours)
+			let model = convertInModelListHours(responseModel: hours)
 			viewController?.renderHour(viewModel: model)
 		case .failure(let error):
 			print("Error \(error)")
@@ -52,11 +52,13 @@ extension MainHomePresenter: IMainHomePresenter {
 }
 
 private extension MainHomePresenter {
-	func convertInModelCity(responseModel: [MainHomeModel.Request.City]) -> [MainHomeModel.ViewModel.City] {
-		responseModel.map { MainHomeModel.ViewModel.City(from: $0) }
+	func convertInModelListCities(responseModel: [MainHomeModel.Request.City]) -> [MainHomeModel.ViewModel.City] {
+		responseModel.map {
+			return MainHomeModel.ViewModel.City(from: $0)
+		}
 	}
 
-	func convertInModelHour(responseModel: [MainHomeModel.Request.Hour]) -> [MainHomeModel.ViewModel.Hour] {
+	func convertInModelListHours(responseModel: [MainHomeModel.Request.Hour]) -> [MainHomeModel.ViewModel.Hour] {
 		responseModel.map { MainHomeModel.ViewModel.Hour(from: $0) }
 	}
 
@@ -65,9 +67,8 @@ private extension MainHomePresenter {
 		MainHomeModel.ViewModel.WeatherLocation(
 			name: responseModel.name,
 			currentTemp: addDegree(temp: responseModel.currentTemperature),
-			condition: showCondition(condition: responseModel.condition, conditionType: ""),
-			assembler: assemblerDateAndTemp(responseModel: responseModel),
-			icon: addURL(urlString: responseModel.icon),
+			condition: responseModel.condition,
+			dateAndTemp: assemblerDateAndTemp(responseModel: responseModel),
 			backgroundImage: responseModel.timeOfDay
 		)
 	}
@@ -90,25 +91,4 @@ private extension MainHomePresenter {
 		}
 		return nil
 	}
-
-	func showCondition(condition: String, conditionType: String) -> String {
-		print("condition --- \(condition)")
-		
-		return ""
-	}
-
-	func parsingCondition(condition: String) {
-
-	}
-}
-
-enum ConditionString: String {
-	case clear = "Clear sky"
-	case cloudy = "Cloudy"
-	case cloudyAndLightRain = "cloudy-and-light-rain"
-	case overcast = "overcast"
-	case overcastAndLightRain = "overcast-and-light-rain"
-	case overcastAndRain = "overcast-and-rain"
-	case partlyCloudy = "partly-cloudy"
-	case partlyCloudyAndRain = "partly-cloudy-and-rain"
 }

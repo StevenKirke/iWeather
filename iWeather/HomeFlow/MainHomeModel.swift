@@ -38,13 +38,11 @@ enum MainHomeModel {
 			let minTemp: String
 			let maxTemp: String
 			let condition: String
-			let icon: String
 			let timeOfDay: String
 		}
 
 		struct City {
 			let cityName: String
-			let cityNameEng: String
 			let coordinate: Coordinate
 			var temperature: Int
 			var condition: String
@@ -80,6 +78,7 @@ enum MainHomeModel {
 			let title: String
 			let imagePath: String
 			let coordinate: Coordinate
+			var conditionType: String
 			var errorDescription: String
 		}
 
@@ -99,7 +98,6 @@ enum MainHomeModel {
 			let currentTemp: String
 			let condition: String
 			let dateAndTemp: String
-			let icon: URL?
 			let backgroundImage: String
 		}
 	}
@@ -110,8 +108,7 @@ enum MainHomeModel {
 extension MainHomeModel.Request.City {
 	init(from: Item) {
 		self.init(
-			cityName: from.name,
-			cityNameEng: from.english,
+			cityName: from.english,
 			coordinate: RCoordinate(from: from),
 			temperature: 0,
 			condition: "",
@@ -131,9 +128,10 @@ extension MainHomeModel.Request.Coordinate {
 extension MainHomeModel.ViewModel.City {
 	init(from: MainHomeModel.Request.City) {
 		self.init(
-			title: Self.convertTitleDegree(text: from.cityNameEng, temp: from.temperature),
+			title: Self.convertTitleDegree(text: from.cityName, temp: from.temperature),
 			imagePath: from.condition,
 			coordinate: MainHomeModel.ViewModel.Coordinate(from: from.coordinate),
+			conditionType: Self.showCondition(condition: from.conditionType),
 			errorDescription: from.errorDescription
 		)
 	}
@@ -143,26 +141,35 @@ extension MainHomeModel.ViewModel.City {
 		let assembler = "\(text) \(temp)\(degree)C"
 		return assembler
 	}
+
+	private static func convertConditionTypeToImage(conditionType: String) -> String {
+		conditionType
+	}
+
+	private static func showCondition(condition: String) -> String {
+		var image = ""
+		switch condition {
+		case "clear":
+			image = "ImageWeather/clear"
+		case "cloudy":
+			image = "ImageWeather/cloudy"
+		case "overcast":
+			image = "ImageWeather/overcast"
+		case "rain":
+			image = "ImageWeather/rain"
+		case "snow":
+			image = "ImageWeather/snow"
+		default:
+		image = ""
+		}
+		return image
+	}
 }
 
 // Маппинг Item
 extension MainHomeModel.ViewModel.Coordinate {
 	init(from: RCoordinate) {
 		self.init(latitude: from.latitude, longitude: from.longitude)
-	}
-}
-
-extension MainHomeModel.Request.Hour {
-	init(from: HourDTO) {
-		self.init(hour: from.hour, icon: Self.addLink(icon: from.icon), temp: Self.addDegree(temp: from.temp))
-	}
-
-	private static func addDegree(temp: Int) -> String {
-		return "\(temp)\u{00B0}C"
-	}
-
-	private static func addLink(icon: String) -> String {
-		"https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg"
 	}
 }
 
@@ -177,52 +184,8 @@ extension MainHomeModel.ViewModel.Hour {
 		dateFormate.dateFormat = "HH:mm:ss"
 		let convertInDate = dateFormate.date(from: fullTime)
 
-		// dateFormate.dateFormat = "HH:mm"
 		dateFormate.dateFormat = "hh:mm a"
 		let string = dateFormate.string(from: convertInDate!)
 		return string
-	}
-}
-
-extension MainHomeModel.Request.Location {
-	init(
-		name: String,
-		dateString: String,
-		currentTemp: String,
-		minTemp: String,
-		maxTemp: String,
-		condition: String,
-		icon: String,
-		timeOfDay: String
-	) {
-		self.init(
-			name: name,
-			data: dateString,
-			currentTemperature: currentTemp,
-			minTemp: minTemp,
-			maxTemp: maxTemp,
-			condition: condition,
-			icon: icon,
-			timeOfDay: timeOfDay
-		)
-	}
-}
-
-extension MainHomeModel.ViewModel.WeatherLocation {
-	init(
-		name: String,
-		currentTemp: String,
-		condition: String,
-		assembler: String,
-		icon: URL?,
-		backgroundImage: String
-	) {
-		self.init(name: name,
-				  currentTemp: currentTemp,
-				  condition: condition,
-				  dateAndTemp: assembler,
-				  icon: icon,
-				  backgroundImage: backgroundImage
-		)
 	}
 }

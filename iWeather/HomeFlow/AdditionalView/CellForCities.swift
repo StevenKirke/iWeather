@@ -12,8 +12,11 @@ final class CellForCities: UICollectionViewCell {
 
 	// MARK: - Public properties
 	static let identifierID = "CellForCities.cell"
-	lazy var labelTitle = createUILabel()
-	lazy var imageBackground = createImage()
+
+	// MARK: - Private properties
+	private lazy var gradient = createGradient()
+	private lazy var labelTitle = createUILabel()
+	private lazy var imageBackground = createImage()
 	private var coordinateCity: MainHomeModel.ViewModel.Coordinate?
 
 	// MARK: - Initializator
@@ -28,9 +31,19 @@ final class CellForCities: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	func reloadData(city: MainHomeModel.ViewModel.City) {
-		self.coordinateCity = city.coordinate
-		self.labelTitle.text = city.title
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		gradient.frame = bounds
+	}
+
+	func reloadData(
+		title: String,
+		coordinate: WCoordinate,
+		image: UIImage?
+	) {
+		self.labelTitle.text = title
+		self.imageBackground.image = image
+		self.coordinateCity = coordinate
 	}
 }
 
@@ -49,7 +62,10 @@ private extension CellForCities {
 	func setupConfiguration() {
 		backgroundColor = UIColor.clear
 		labelTitle.textColor = UIColor.white
+		labelTitle.textAlignment = .center
 		labelTitle.font = FontsStyle.poppinsBold(20).font
+
+		imageBackground.layer.insertSublayer(gradient, at: 0)
 	}
 }
 
@@ -65,7 +81,7 @@ private extension CellForCities {
 
 		labelTitle.snp.makeConstraints { text in
 			text.top.equalToSuperview().inset(24)
-			text.left.right.equalToSuperview()
+			text.left.right.equalToSuperview().inset(8)
 		}
 	}
 }
@@ -78,6 +94,16 @@ private extension CellForCities {
 		label.textAlignment = .center
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
+	}
+
+	func createGradient() -> CAGradientLayer {
+		let gradient = CAGradientLayer()
+		let colours = [UIColor.black.cgColor, UIColor.white.cgColor, UIColor.black.cgColor]
+		gradient.startPoint = CGPoint(x: 0.5, y: 0.1)
+		gradient.endPoint = CGPoint(x: 0.5, y: 0.9)
+		gradient.colors = colours
+		gradient.opacity = 0.6
+		return gradient
 	}
 
 	func createImage() -> UIImageView {

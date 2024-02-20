@@ -12,10 +12,10 @@
 		325B38D02B84AE4700A3BAE0 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 325B38CF2B84AE4700A3BAE0 /* Poppins-Regular.ttf */; };
 		325B38D32B84AFD300A3BAE0 /* GlobalStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38D22B84AFD300A3BAE0 /* GlobalStyles.swift */; };
 		325B38D52B84B3A900A3BAE0 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 325B38D42B84B3A900A3BAE0 /* Roboto-Regular.ttf */; };
-		325B38D92B84DEFE00A3BAE0 /* ConvertorDTOCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38D82B84DEFE00A3BAE0 /* ConvertorDTOCity.swift */; };
 		325B38DB2B84DF1C00A3BAE0 /* ConvertorHourDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38DA2B84DF1C00A3BAE0 /* ConvertorHourDTO.swift */; };
 		325B38DD2B84DF3B00A3BAE0 /* ConvertorWeatherForLocationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38DC2B84DF3B00A3BAE0 /* ConvertorWeatherForLocationDTO.swift */; };
 		325B38DF2B85003700A3BAE0 /* ConvertorCityDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38DE2B85003700A3BAE0 /* ConvertorCityDTO.swift */; };
+		325B38E12B85441400A3BAE0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 325B38E02B85441400A3BAE0 /* README.md */; };
 		32B7A9832B7BDD3000537E72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9822B7BDD3000537E72 /* AppDelegate.swift */; };
 		32B7A9852B7BDD3000537E72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9842B7BDD3000537E72 /* SceneDelegate.swift */; };
 		32B7A98C2B7BDD3100537E72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32B7A98B2B7BDD3100537E72 /* Assets.xcassets */; };
@@ -73,10 +73,10 @@
 		325B38CF2B84AE4700A3BAE0 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		325B38D22B84AFD300A3BAE0 /* GlobalStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalStyles.swift; sourceTree = "<group>"; };
 		325B38D42B84B3A900A3BAE0 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		325B38D82B84DEFE00A3BAE0 /* ConvertorDTOCity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertorDTOCity.swift; sourceTree = "<group>"; };
 		325B38DA2B84DF1C00A3BAE0 /* ConvertorHourDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertorHourDTO.swift; sourceTree = "<group>"; };
 		325B38DC2B84DF3B00A3BAE0 /* ConvertorWeatherForLocationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertorWeatherForLocationDTO.swift; sourceTree = "<group>"; };
 		325B38DE2B85003700A3BAE0 /* ConvertorCityDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertorCityDTO.swift; sourceTree = "<group>"; };
+		325B38E02B85441400A3BAE0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		32B7A97F2B7BDD3000537E72 /* iWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32B7A9822B7BDD3000537E72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		32B7A9842B7BDD3000537E72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -142,7 +142,6 @@
 		325B38D72B84DE6600A3BAE0 /* ConvertersDTO */ = {
 			isa = PBXGroup;
 			children = (
-				325B38D82B84DEFE00A3BAE0 /* ConvertorDTOCity.swift */,
 				325B38DA2B84DF1C00A3BAE0 /* ConvertorHourDTO.swift */,
 				325B38DC2B84DF3B00A3BAE0 /* ConvertorWeatherForLocationDTO.swift */,
 				325B38DE2B85003700A3BAE0 /* ConvertorCityDTO.swift */,
@@ -153,6 +152,7 @@
 		32B7A9762B7BDD3000537E72 = {
 			isa = PBXGroup;
 			children = (
+				325B38E02B85441400A3BAE0 /* README.md */,
 				32B7A9982B7BDE1600537E72 /* swiftlint.yml */,
 				32B7A9D52B810E5A00537E72 /* Packages */,
 				32B7A9812B7BDD3000537E72 /* iWeather */,
@@ -177,7 +177,6 @@
 				325B38D12B84AFB100A3BAE0 /* Styles */,
 				32B7A9F72B8158F900537E72 /* Extensions */,
 				32B7A9C42B7FCD7B00537E72 /* Mocks */,
-				32B7A99E2B7BDE9300537E72 /* Entities */,
 				32B7A99C2B7BDE4400537E72 /* Managers */,
 				32B7A99D2B7BDE7200537E72 /* Services */,
 				32B7A99B2B7BDE2F00537E72 /* Coordinators */,
@@ -244,13 +243,6 @@
 				32B7AA022B826B7900537E72 /* TimeConvertServices.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		32B7A99E2B7BDE9300537E72 /* Entities */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Entities;
 			sourceTree = "<group>";
 		};
 		32B7A99F2B7BDF2E00537E72 /* HomeFlow */ = {
@@ -460,6 +452,7 @@
 				325B38D02B84AE4700A3BAE0 /* Poppins-Regular.ttf in Resources */,
 				32B7A9CE2B7FFBBF00537E72 /* CitiesMock.json in Resources */,
 				325B38CE2B84AE3900A3BAE0 /* Poppins-Medium.ttf in Resources */,
+				325B38E12B85441400A3BAE0 /* README.md in Resources */,
 				32B7A9992B7BDE1600537E72 /* swiftlint.yml in Resources */,
 				32B7A98C2B7BDD3100537E72 /* Assets.xcassets in Resources */,
 			);
@@ -556,7 +549,6 @@
 				32B7A9C02B7F94F500537E72 /* MainHomeWorker.swift in Sources */,
 				32B7AA092B834EA500537E72 /* HeaderView.swift in Sources */,
 				32B7A9A22B7BDFA900537E72 /* MainHomeAssembler.swift in Sources */,
-				325B38D92B84DEFE00A3BAE0 /* ConvertorDTOCity.swift in Sources */,
 				32B7A9CD2B7FF37200537E72 /* WriteFileManager.swift in Sources */,
 				32B7A9FD2B8159DC00537E72 /* TodayCollectionView.swift in Sources */,
 				32B7A9D22B80DFEF00537E72 /* AssemblerURLRequestService.swift in Sources */,
