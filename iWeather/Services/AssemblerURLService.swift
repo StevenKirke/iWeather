@@ -36,7 +36,8 @@ final class AssemblerURLCities: IAssemblerURLService {
 		components.queryItems = [
 			 URLQueryItem(name: "lat", value: "\(lat)"),
 			 URLQueryItem(name: "lon", value: "\(lon)"),
-			 URLQueryItem(name: "limit", value: "1")
+			 URLQueryItem(name: "limit", value: "1"),
+			 URLQueryItem(name: "lang", value: "en_US")
 		 ]
 		return components.url
 	}

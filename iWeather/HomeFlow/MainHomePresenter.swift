@@ -65,9 +65,10 @@ private extension MainHomePresenter {
 		MainHomeModel.ViewModel.WeatherLocation(
 			name: responseModel.name,
 			currentTemp: addDegree(temp: responseModel.currentTemperature),
-			condition: responseModel.condition,
+			condition: showCondition(condition: responseModel.condition, conditionType: ""),
 			assembler: assemblerDateAndTemp(responseModel: responseModel),
-			icon: addURL(urlString: responseModel.icon)
+			icon: addURL(urlString: responseModel.icon),
+			backgroundImage: responseModel.timeOfDay
 		)
 	}
 
@@ -90,8 +91,14 @@ private extension MainHomePresenter {
 		return nil
 	}
 
-	func showCondition(condition: String) {
-		print("\(condition)")
+	func showCondition(condition: String, conditionType: String) -> String {
+		print("condition --- \(condition)")
+		
+		return ""
+	}
+
+	func parsingCondition(condition: String) {
+
 	}
 }
 

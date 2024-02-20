@@ -13,23 +13,19 @@ protocol IMainHomeWorker: AnyObject {
 	 - Returns: Возвращает модель CitiesDTO или ошибку.
 	 */
 	func fetchDataCityList(response: @escaping (Result<CitiesDTO, Error>) -> Void)
+
 	/**
-	 Запрос получения температуры населенного пункта.
+	 Запрос получения прогноза погоды для населенного пункта.
 	 - Parameters:
 			- cityCoordinate: Координаты населенного пункта.
-
 	 - Returns: Возвращает модель CitiesDTO или ошибку.
 	 */
-	func fetchDataWeather(
-		cityCoordinate: MainHomeModel.Request.Coordinate,
-		response: @escaping (Result<TemperatureDTO, Error>) -> Void
+	func fetchWeather<T: Decodable>(
+		coordinates: RCoordinate, model: T.Type, response: @escaping (Result<T, Error>
+		) -> Void
 	)
 
-	func fetchDataWeatherTest<T: Decodable>(
-		cityCoordinate: RCoordinate, model: T.Type,
-		response: @escaping (Result<T, Error>) -> Void
-	)
-
+	/// Запрос текущий координат устройства.
 	func fetchCoordinate(resultCoordinate: @escaping (Result<RCoordinate, Error>) -> Void) async
 }
 
@@ -68,8 +64,6 @@ final class MainHomeWorker {
 extension MainHomeWorker: IMainHomeWorker {
 
 	func fetchDataCityList(response: @escaping (Result<CitiesDTO, Error>) -> Void) {
-		let citiesURL = assemblerURL?.assemblerUlRsCities()
-		print(citiesURL)
 		fileManager?.getFile(resource: fileName, type: .json) { result in
 			switch result {
 			case .success(let data):
@@ -87,7 +81,6 @@ extension MainHomeWorker: IMainHomeWorker {
 		}
 	}
 
-
 	func fetchData() {
 //		let citiesURL = assemblerURL?.assemblerUlRsCities()
 //		print(citiesURL)
@@ -99,43 +92,6 @@ extension MainHomeWorker: IMainHomeWorker {
 //				print("Error \(response)")
 //			}
 //		}
-	}
-
-
-	func fetchDataWeather(
-		cityCoordinate: MainHomeModel.Request.Coordinate,
-		response: @escaping (Result<TemperatureDTO, Error>) -> Void
-	) {
-		let url = assemblerURL?.assemblerUlRsTemperature(
-			lat: cityCoordinate.latitude,
-			lon: cityCoordinate.longitude
-		)
-
-		guard let currentURL = url else {
-			print("Failure URL")
-			return
-		}
-
-		let requestURL = assemblerRequestURL?.assemblerURLRequest(url: currentURL)
-		guard let currentRequestURL = requestURL else {
-			print("Failure RequestURL")
-			return
-		}
-		networkManager?.getData(request: currentRequestURL) { result in
-			switch result {
-			case .success(let data):
-				self.decodeData(data: data, model: TemperatureDTO.self) { resultJSON in
-				switch resultJSON {
-				case .success(let json):
-					response(.success(json))
-				case .failure(let error):
-					response(.failure(error))
-				}
-			}
-			case .failure(let error):
-				response(.failure(error))
-			}
-		}
 	}
 
 	func fetchCoordinate(resultCoordinate: @escaping (Result<RCoordinate, Error>) -> Void) async {
@@ -150,25 +106,15 @@ extension MainHomeWorker: IMainHomeWorker {
 		}
 	}
 
-	func fetchDataWeatherTest<T: Decodable>(
-		cityCoordinate: RCoordinate, model: T.Type,
-		response: @escaping (Result<T, Error>) -> Void
+	func fetchWeather<
+		T: Decodable>(coordinates: RCoordinate, model: T.Type, response: @escaping (Result<T, Error>) -> Void
 	) {
-			let url = assemblerURL?.assemblerUlRsTemperature(
-				lat: cityCoordinate.latitude,
-				lon: cityCoordinate.longitude
-			)
+		let url = assemblerURL?.assemblerUlRsTemperature(lat: coordinates.latitude, lon: coordinates.longitude)
 
-			guard let currentURL = url else {
-				print("Failure URL")
-				return
-			}
+		guard let currentURL = url else { return }
 
-			let requestURL = assemblerRequestURL?.assemblerURLRequest(url: currentURL)
-			guard let currentRequestURL = requestURL else {
-				print("Failure RequestURL")
-				return
-			}
+		let requestURL = assemblerRequestURL?.assemblerURLRequest(url: currentURL)
+		guard let currentRequestURL = requestURL else { return }
 
 		networkManager?.getData(request: currentRequestURL) { result in
 			switch result {

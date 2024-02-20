@@ -17,6 +17,10 @@ final class MainHomeAssembler {
 		let assemblerURL = AssemblerURLCities()
 		let assemblerRequestURL = AssemblerURLRequestService()
 
+		let convertorCityDTO = ConvertorCityDTO()
+		let convertorHourDTO = ConvertorHourDTO()
+		let convertorWeatherDTO = ConvertorWeatherForLocationDTO()
+
 		let worker = MainHomeWorker(
 			networkManager: networkManager,
 			decodeJSONManager: decodeJSONManager,
@@ -28,7 +32,12 @@ final class MainHomeAssembler {
 
 		let viewController = MainHomeViewController()
 		let presenter = MainHomePresenter(viewController: viewController)
-		let iterator = MainHomeIterator(presenter: presenter, worker: worker)
+		let iterator = MainHomeIterator(
+			presenter: presenter,
+			worker: worker,
+			convertorCityDTO: convertorCityDTO,
+			convertorHourDTO: convertorHourDTO,
+			convertorWeatherForLocationDTO: convertorWeatherDTO)
 
 		viewController.iterator = iterator
 

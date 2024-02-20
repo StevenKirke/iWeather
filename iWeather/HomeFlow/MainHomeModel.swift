@@ -39,12 +39,16 @@ enum MainHomeModel {
 			let maxTemp: String
 			let condition: String
 			let icon: String
+			let timeOfDay: String
 		}
 
 		struct City {
 			let cityName: String
+			let cityNameEng: String
 			let coordinate: Coordinate
 			var temperature: Int
+			var condition: String
+			var conditionType: String
 			var errorDescription: String
 		}
 
@@ -74,6 +78,7 @@ enum MainHomeModel {
 
 		struct City {
 			let title: String
+			let imagePath: String
 			let coordinate: Coordinate
 			var errorDescription: String
 		}
@@ -95,6 +100,7 @@ enum MainHomeModel {
 			let condition: String
 			let dateAndTemp: String
 			let icon: URL?
+			let backgroundImage: String
 		}
 	}
 }
@@ -105,8 +111,11 @@ extension MainHomeModel.Request.City {
 	init(from: Item) {
 		self.init(
 			cityName: from.name,
+			cityNameEng: from.english,
 			coordinate: RCoordinate(from: from),
 			temperature: 0,
+			condition: "",
+			conditionType: "",
 			errorDescription: ""
 		)
 	}
@@ -122,7 +131,8 @@ extension MainHomeModel.Request.Coordinate {
 extension MainHomeModel.ViewModel.City {
 	init(from: MainHomeModel.Request.City) {
 		self.init(
-			title: Self.convertTitleDegree(text: from.cityName, temp: from.temperature),
+			title: Self.convertTitleDegree(text: from.cityNameEng, temp: from.temperature),
+			imagePath: from.condition,
 			coordinate: MainHomeModel.ViewModel.Coordinate(from: from.coordinate),
 			errorDescription: from.errorDescription
 		)
@@ -182,7 +192,8 @@ extension MainHomeModel.Request.Location {
 		minTemp: String,
 		maxTemp: String,
 		condition: String,
-		icon: String
+		icon: String,
+		timeOfDay: String
 	) {
 		self.init(
 			name: name,
@@ -191,7 +202,8 @@ extension MainHomeModel.Request.Location {
 			minTemp: minTemp,
 			maxTemp: maxTemp,
 			condition: condition,
-			icon: icon
+			icon: icon,
+			timeOfDay: timeOfDay
 		)
 	}
 }
@@ -202,13 +214,15 @@ extension MainHomeModel.ViewModel.WeatherLocation {
 		currentTemp: String,
 		condition: String,
 		assembler: String,
-		icon: URL?
+		icon: URL?,
+		backgroundImage: String
 	) {
 		self.init(name: name,
 				  currentTemp: currentTemp,
 				  condition: condition,
 				  dateAndTemp: assembler,
-				  icon: icon
+				  icon: icon,
+				  backgroundImage: backgroundImage
 		)
 	}
 }

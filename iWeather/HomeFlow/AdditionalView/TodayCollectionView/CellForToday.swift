@@ -53,9 +53,9 @@ private extension CellForToday {
 	func setupConfiguration() {
 		backgroundColor = UIColor.clear
 
-		labelTemperature.text = "24\u{00B0}C"
+		labelTemperature.font = FontsStyle.poppinsMedium(15).font
 
-		labelTime.text = "1:00PM"
+		labelTime.font = FontsStyle.poppinsBold(15).font
 	}
 }
 
@@ -128,8 +128,6 @@ private extension CellForToday {
 		label.numberOfLines = 1
 		label.textAlignment = .center
 		label.textColor = UIColor.white
-		label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-		label.font = UIFont(name: "Poppins-Bold", size: 16)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
 	}

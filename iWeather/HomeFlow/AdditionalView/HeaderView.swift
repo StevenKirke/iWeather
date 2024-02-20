@@ -18,7 +18,8 @@ final class HeaderView: UIView {
 	// MARK: - Private properties
 	private lazy var headerView = createView()
 	private lazy var imageBackground = createImage()
-	
+	private lazy var gradient = createGradient()
+
 	private lazy var labelNameCity = createUILabel()
 	private lazy var labelData = createUILabel()
 
@@ -29,7 +30,9 @@ final class HeaderView: UIView {
 
 	private lazy var imageIcon = createSystemImage()
 
-	private lazy var imageIconWeather = createImage()
+	private lazy var imageIconWeather = createImageIconWeather()
+
+	private var currentFrame: CGSize = .zero
 
 	// MARK: - Initializator
 	override init(frame: CGRect) {
@@ -43,17 +46,32 @@ final class HeaderView: UIView {
 		fatalError("init(coder:) has not been implemented")
 	}
 
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		gradient.frame = bounds
+	}
+
 	func reloadData(model: MainHomeModel.ViewModel.WeatherLocation) {
+		imageBackground.image = checkTimeOfDay(timeOfDay: model.backgroundImage)
 		labelNameCity.text = model.name
 		labelData.text = model.dateAndTemp
 		labelTemperature.text = model.currentTemp
 		labelCondition.text = model.condition
-		if let iconURL = model.icon {
-			self.loadImageSVG(url: iconURL)
-		}
 	}
 
 	// MARK: - Private methods
+	private func checkTimeOfDay(timeOfDay: String) -> UIImage? {
+		var named = ""
+		switch timeOfDay {
+		case "d":
+			named = "ImageForHeader/DayForHeader"
+		case "n":
+			named = "ImageForHeader/nightForHeader"
+		default:
+			named = "Empty"
+		}
+		return UIImage(named: named)
+	}
 }
 
 // - MARK: Add UIView in Controler
@@ -81,18 +99,20 @@ private extension HeaderView {
 	func setupConfiguration() {
 		headerView.backgroundColor = UIColor.clear
 
-		labelNameCity.font = UIFont(name: "Poppins-Bold", size: 28)
+		imageBackground.layer.insertSublayer(gradient, at: 0)
 
-		labelData.font = UIFont(name: "Poppins-Bold", size: 13)
+		labelNameCity.font = FontsStyle.poppinsBold(28).font
 
-		labelTemperature.font = UIFont(name: "Poppins-Bold", size: 36)
+		labelData.font = FontsStyle.poppinsRegular(12.91).font
 
-		labelCondition.font = UIFont.systemFont(ofSize: 21, weight: .regular)
-		labelCondition.font = UIFont(name: "Poppins-Bold", size: 21)
+		labelTemperature.font = FontsStyle.poppinsBold(36).font
+
+		labelCondition.numberOfLines = 1
+		labelCondition.textAlignment = .right
+		labelCondition.font = FontsStyle.poppinsRegular(21.33).font
 
 		labelDetail.text = "Swipe down for details"
-		labelDetail.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-		labelDetail.font = UIFont(name: "Poppins-Bold", size: 12)
+		labelDetail.font = FontsStyle.robotoRegular(12).font
 		labelDetail.textColor = UIColor.white.withAlphaComponent(0.6)
 	}
 }
@@ -118,7 +138,7 @@ private extension HeaderView {
 		labelNameCity.snp.makeConstraints { nameCity in
 			nameCity.centerY.equalTo(headerView.snp.centerY)
 			nameCity.left.equalTo(headerView.snp.left).inset(25)
-			nameCity.height.equalTo(42)
+			nameCity.height.equalTo(35)
 		}
 
 		labelData.snp.makeConstraints { data in
@@ -130,13 +150,14 @@ private extension HeaderView {
 		labelTemperature.snp.makeConstraints { temperature in
 			temperature.centerY.equalTo(headerView.snp.centerY)
 			temperature.right.equalTo(headerView.snp.right).inset(25)
-			temperature.height.equalTo(42)
+			temperature.height.equalTo(36)
 		}
 
 		labelCondition.snp.makeConstraints { condition in
 			condition.top.equalTo(labelNameCity.snp.bottom).inset(-7)
 			condition.right.equalTo(headerView.snp.right).inset(25)
-			condition.height.equalTo(19)
+			condition.width.equalTo(headerView.snp.width).dividedBy(2.5)
+			condition.height.equalTo(35)
 		}
 
 		labelDetail.snp.makeConstraints { detail in
@@ -153,9 +174,9 @@ private extension HeaderView {
 		}
 
 		imageIconWeather.snp.makeConstraints { iconWeather in
-			iconWeather.width.height.equalTo(60)
-			iconWeather.top.equalTo(headerView.snp.top).inset(20)
-			iconWeather.left.equalTo(headerView.snp.left).inset(20)
+			iconWeather.width.height.equalTo(50)
+			iconWeather.top.equalTo(headerView.snp.top).inset(25)
+			iconWeather.left.equalTo(headerView.snp.left).inset(25)
 		}
 	}
 }
@@ -163,7 +184,7 @@ private extension HeaderView {
 // - MARK: Fabric UI Element.
 private extension HeaderView {
 	func createImage() -> UIImageView {
-		let image = UIImage(named: "ImageWeather/nightHill")
+		let image = UIImage(named: "ImageForHeader/nightForHeader")
 		let imageView = UIImageView(image: image)
 		imageView.layer.cornerRadius = 30
 		imageView.clipsToBounds = true
@@ -173,12 +194,10 @@ private extension HeaderView {
 		return imageView
 	}
 
-	func createII() -> UIImageView {
-		let image = UIImage(named: "ImageWeather/Cloudy")
+	func createImageIconWeather() -> UIImageView {
+		let image = UIImage(named: "Empty")
 		let imageView = UIImageView(image: image)
 		imageView.contentMode = .scaleAspectFill
-		imageView.layer.cornerRadius = 22
-		imageView.clipsToBounds = true
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 
 		return imageView
@@ -190,18 +209,17 @@ private extension HeaderView {
 		return view
 	}
 
-//	func createGradient() -> CAGradientLayer {
-//		let gradient = CAGradientLayer()
-//		let colours = [
-//			UIColor(hex: "#1B0F36").cgColor,
-//			UIColor(hex: "#2F1C78").cgColor,
-//			UIColor(hex: "#321E82").cgColor
-//		]
-//		//gradient.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 381)
-//		gradient.colors = colours
-//
-//		return gradient
-//	}
+	func createGradient() -> CAGradientLayer {
+		let gradient = CAGradientLayer()
+		let colours = [
+			UIColor(hex: "#1B0F36").cgColor,
+			UIColor(hex: "#2F1C78").cgColor,
+			UIColor(hex: "#321E82").cgColor
+		]
+		gradient.colors = colours
+		gradient.opacity = 0.5
+		return gradient
+	}
 
 	func createUILabel() -> UILabel {
 		let label = UILabel()
@@ -220,23 +238,5 @@ private extension HeaderView {
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 
 		return imageView
-	}
-}
-
-private extension HeaderView {
-	func loadImageSVG(url: URL) {
-		URLSession.shared.dataTask(with: url) { data, response, error in
-			DispatchQueue.main.async {
-				guard
-					let currentData = data, error == nil,
-					let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200
-					else {
-					return
-				}
-				let receivedImage: SVGKImage? = SVGKImage(data: currentData)
-				guard let convImage = receivedImage else { return }
-				self.imageIconWeather.image = convImage.uiImage
-			}
-		}.resume()
 	}
 }

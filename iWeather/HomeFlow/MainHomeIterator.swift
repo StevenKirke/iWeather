@@ -18,7 +18,7 @@ protocol IMainHomeIterator: AnyObject {
 		- coordinate: The cubes available for allocation
 	 - Returns: Возвращает температуру или ошибку.
 	 */
-	func fetchTemperatureForCity(coordinate: RCoordinate, response: @escaping (Result<Int, Error>) -> Void)
+	func fetchTemperatureForCity(coordinate: RCoordinate, response: @escaping (Result<(Int, String), Error>) -> Void)
 
 	func fetchCurrentLocation(coordinate: MainHomeModel.Response.Coordinate?)
 }
@@ -30,21 +30,27 @@ final class MainHomeIterator {
 	// MARK: - Dependencies
 	var presenter: IMainHomePresenter?
 	var worker: IMainHomeWorker?
+	let convertorCityDTO: IConvertorCityDTO?
+	let convertorHourDTO: IConvertorHourDTO?
+	let convertorWeatherForLocationDTO: IConvertorWeatherForLocationDTO?
 
 	// MARK: - Private properties
 	let convertDate = TimeConvertServices()
 
 	// MARK: - Initializator
-	internal init(presenter: IMainHomePresenter?, worker: IMainHomeWorker?) {
+	internal init(
+		presenter: IMainHomePresenter?,
+		worker: IMainHomeWorker?,
+		convertorCityDTO: IConvertorCityDTO?,
+		convertorHourDTO: IConvertorHourDTO?,
+		convertorWeatherForLocationDTO: IConvertorWeatherForLocationDTO?
+	) {
 		self.presenter = presenter
 		self.worker = worker
+		self.convertorCityDTO = convertorCityDTO
+		self.convertorHourDTO = convertorHourDTO
+		self.convertorWeatherForLocationDTO = convertorWeatherForLocationDTO
 	}
-
-	// MARK: - Lifecycle
-
-	// MARK: - Public methods
-
-	// MARK: - Private methods
 }
 
 // MARK: - Fetch data.
@@ -63,11 +69,11 @@ extension MainHomeIterator: IMainHomeIterator {
 	}
 
 	// Запрос прогноза погоды для города.
-	func fetchTemperatureForCity(coordinate: RCoordinate, response: @escaping (Result<Int, Error>) -> Void) {
-		self.worker?.fetchDataWeatherTest(cityCoordinate: coordinate, model: TemperatureDTO.self) { responseWeather in
+	func fetchTemperatureForCity(coordinate: RCoordinate, response: @escaping (Result<(Int, String), Error>) -> Void) {
+		self.worker?.fetchWeather(coordinates: coordinate, model: TemperatureDTO.self) { responseWeather in
 			switch responseWeather {
 			case .success(let weather):
-				response(.success(weather.fact.temp))
+				response(.success((weather.fact.temp, weather.fact.condition.iconType)))
 			case .failure(let error):
 				response(.failure(error))
 			}
@@ -119,22 +125,19 @@ private extension MainHomeIterator {
 		var tempCities: [MainHomeModel.Request.City] = []
 		for city in cities {
 			group.enter()
-			var city = MainHomeModel.Request.City(
-				cityName: city.cityName,
-				coordinate: city.coordinate,
-				temperature: 0,
-				errorDescription: ""
-			)
-			self.fetchTemperatureForCity(coordinate: city.coordinate) { resultTemperature in
-				switch resultTemperature {
-				case .success(let temperature):
-					let temp = temperature
-					city.temperature = temp
-				case .failure(let error):
-					city.errorDescription = error.localizedDescription
+			if var currentCity = convertorCityDTO?.convert(cityDTO: city) {
+				self.fetchTemperatureForCity(coordinate: city.coordinate) { resultTemperature in
+					switch resultTemperature {
+					case .success(let temperature):
+						let temp = temperature
+						currentCity.temperature = temp.0
+						currentCity.condition = temp.1
+					case .failure(let error):
+						currentCity.errorDescription = error.localizedDescription
+					}
+					tempCities.append(city)
+					group.leave()
 				}
-				tempCities.append(city)
-				group.leave()
 			}
 		}
 		group.notify(queue: .main) {
@@ -146,87 +149,28 @@ private extension MainHomeIterator {
 // - MARK: Handler request weather for current location (City).
 private extension MainHomeIterator {
 	func getWeatherForCurrentLocation(coordinate: RCoordinate) {
-		self.worker?.fetchDataWeatherTest(cityCoordinate: coordinate, model: WeatherDTO.self) { responseWeather in
+		self.worker?.fetchWeather(coordinates: coordinate, model: WeatherDTO.self) { responseWeather in
 			switch responseWeather {
 			case .success(let weather):
-				let hours = self.convertHours(forecast: weather.forecasts.first)
-				self.presenter?.presentCities(response: .successHours(hours))
-
-				if let location = self.convertToCurrentLocation(weather: weather) {
-					self.presenter?.presentCities(response: .successCurrentLocation(location))
-				}
+				self.transferHour(forecast: weather.forecasts.first)
+				self.transferWeatherLocation(weather: weather)
 			case .failure(let error):
 				self.presenter?.presentCities(response: .failure(error))
 			}
 		}
 	}
 
-	func convertHours(forecast: Forecast?) -> [MainHomeModel.Request.Hour] {
-		var convertHours: [MainHomeModel.Request.Hour] = []
-		if let currentDay = forecast, let hours = currentDay.hours {
-			convertHours = hours.map { MainHomeModel.Request.Hour(from: $0) }
-		}
-		return convertHours
+	// Передача температуры и иконки погоды, на сутки с интервалом 1 час.
+	func transferHour(forecast: Forecast?) {
+		guard let currentForecast = forecast else { return }
+		guard let hours = self.convertorHourDTO?.convert(forecastDTO: currentForecast) else { return }
+
+		self.presenter?.presentCities(response: .successHours(hours))
 	}
 
-	func convertToCurrentLocation(weather: WeatherDTO) -> MainHomeModel.Request.Location? {
-		if let currentForecast = weather.forecasts.first {
-			let dateConvert = convertDateInShort(weather: weather)
-			let minMaxTemp = answerTimesOfDay(dayTime: weather.fact.daytime, parts: currentForecast.parts)
-			let location = MainHomeModel.Request.Location(
-				name: convertNameCity(nameCity: weather.geoObject.locality.name),
-				data: convertDateInShort(weather: weather),
-				currentTemperature: convertToString(weather.fact.temp),
-				minTemp: minMaxTemp.0,
-				maxTemp: minMaxTemp.1,
-				condition: weather.fact.condition.rawValue,
-				icon: convertIconURLString(icon: weather.fact.icon)
-			)
-			return location
-		}
-		return nil
-	}
-
-	func convertIconURLString(icon: String) -> String {
-		"https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg"
-	}
-
-	func convertNameCity(nameCity: String) -> String {
-		let cropSlash = nameCity.components(separatedBy: "/")
-		if let name = cropSlash.last {
-			return croppingText(text: name)
-		}
-		return ""
-	}
-
-	func croppingText(text: String) -> String {
-		text.replacingOccurrences(of: "_", with: " ")
-	}
-
-	func convertDateInShort(weather: WeatherDTO) -> String {
-		if let currentForecast = weather.forecasts.first {
-			return convertDate.convertData(dataString: currentForecast.date)
-		}
-		return ""
-	}
-
-	func answerTimesOfDay(dayTime: Daytime, parts: Parts) -> (String, String) {
-		var minTemp = ""
-		var maxTemp = ""
-
-		switch dayTime {
-		case .d:
-			minTemp = convertToString(parts.day.tempMin)
-			maxTemp = convertToString(parts.day.tempMin)
-		case .n:
-			minTemp = convertToString(parts.night.tempMin)
-			maxTemp = convertToString(parts.night.tempMin)
-		}
-		return (minTemp, maxTemp)
-	}
-
-	func convertToString(_ tempInt: Int?) -> String {
-		guard let temp = tempInt else { return "" }
-		return String(temp)
+	// Передача погоды для выбранной локации.
+	func transferWeatherLocation(weather: WeatherDTO) {
+		guard let location = self.convertorWeatherForLocationDTO?.convertDTO(weatherDTO: weather) else { return }
+		self.presenter?.presentCities(response: .successCurrentLocation(location))
 	}
 }

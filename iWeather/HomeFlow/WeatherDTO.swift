@@ -54,6 +54,7 @@ enum Condition: String, Codable {
 	case partlyCloudyAndRain = "partly-cloudy-and-rain"
 	case overcastAndWetSnow = "overcast-and-wet-snow"
 	case overcastAndLightSnow = "overcast-and-light-snow"
+	case cloudyAndSnow = "cloudy-and-snow"
 }
 
 enum Daytime: String, Codable {

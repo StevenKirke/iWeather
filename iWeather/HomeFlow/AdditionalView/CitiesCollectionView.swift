@@ -109,7 +109,6 @@ extension CitiesCollectionView: UICollectionViewDataSource, UICollectionViewDele
 
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let city = modelForDisplay[indexPath.item]
-		//print("\(city.title) \(city.coordinate)")
 		if let cell = collectionView.dequeueReusableCell(
 			withReuseIdentifier: CellForCities.identifierID,
 			for: indexPath
@@ -122,9 +121,6 @@ extension CitiesCollectionView: UICollectionViewDataSource, UICollectionViewDele
 
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		let location = modelForDisplay[indexPath.item]
-		//print("\(location.title) \(location.coordinate)")
-		//print(location.title)
-		//print(location.coordinate)
 		self.handlerCoordinateDelegate?.returnCoordinate(
 			latitude: location.coordinate.latitude,
 			longitude: location.coordinate.longitude

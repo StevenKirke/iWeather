@@ -16,6 +16,7 @@ final class TodayCollectionView: UIView {
 
 	// MARK: - Private properties
 	private lazy var collectionTodayTemp = createCollectionView()
+	private lazy var labelTitle = createUILabel()
 	private var modelForDisplay: [MainHomeModel.ViewModel.Hour] = []
 
 	// MARK: - Initializator
@@ -41,6 +42,7 @@ final class TodayCollectionView: UIView {
 private extension TodayCollectionView {
 	/// Добавление элементов UIView в Controller.
 	func addUIView() {
+		addSubview(labelTitle)
 		addSubview(collectionTodayTemp)
 	}
 }
@@ -56,6 +58,10 @@ private extension TodayCollectionView {
 
 		collectionTodayTemp.delegate = self
 		collectionTodayTemp.dataSource = self
+
+		labelTitle.text = "Today"
+		labelTitle.textAlignment = .left
+		labelTitle.font = FontsStyle.poppinsMedium(20).font
 	}
 }
 
@@ -64,16 +70,24 @@ private extension TodayCollectionView {
 	/// Верстка элементов UI.
 	/// - Note: Добавление constraints для UIView элементов.
 	func setupLayout() {
-		collectionTodayTemp.snp.makeConstraints { make in
-			make.top.equalToSuperview()
-			make.left.equalToSuperview().inset(25)
-			make.right.equalToSuperview().inset(25)
-			make.bottom.equalToSuperview()
+		collectionTodayTemp.snp.makeConstraints { collection in
+			collection.top.equalToSuperview()
+			collection.left.equalToSuperview().inset(25)
+			collection.right.equalToSuperview().inset(25)
+			collection.bottom.equalToSuperview()
+		}
+
+		labelTitle.snp.makeConstraints { title in
+			title.bottom.equalTo(collectionTodayTemp.snp.top).inset(-6)
+			title.left.equalTo(collectionTodayTemp.snp.left)
+			title.width.equalTo(collectionTodayTemp.snp.width).dividedBy(2)
+			title.height.equalTo(30)
 		}
 	}
 }
 
 extension TodayCollectionView: UICollectionViewDelegateFlowLayout {
+
 	func collectionView(
 		_ collectionView: UICollectionView,
 		layout collectionViewLayout: UICollectionViewLayout,
@@ -93,6 +107,7 @@ extension TodayCollectionView: UICollectionViewDelegateFlowLayout {
 
 // MARK: - Add Delegate UICollectionView
 extension TodayCollectionView: UICollectionViewDataSource, UICollectionViewDelegate {
+
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		modelForDisplay.count
 	}
@@ -125,5 +140,14 @@ private extension TodayCollectionView {
 		collectionView.translatesAutoresizingMaskIntoConstraints = false
 
 		return collectionView
+	}
+
+	func createUILabel() -> UILabel {
+		let label = UILabel()
+		label.numberOfLines = 1
+		label.textAlignment = .center
+		label.textColor = UIColor.white
+		label.translatesAutoresizingMaskIntoConstraints = false
+		return label
 	}
 }

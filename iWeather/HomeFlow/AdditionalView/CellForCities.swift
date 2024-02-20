@@ -49,8 +49,7 @@ private extension CellForCities {
 	func setupConfiguration() {
 		backgroundColor = UIColor.clear
 		labelTitle.textColor = UIColor.white
-		labelTitle.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-		labelTitle.font = UIFont(name: "Poppins-Bold", size: 20)
+		labelTitle.font = FontsStyle.poppinsBold(20).font
 	}
 }
 
