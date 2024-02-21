@@ -18,6 +18,8 @@ final class TodayCollectionView: UIView {
 	private lazy var collectionTodayTemp = createCollectionView()
 	private lazy var labelTitle = createUILabel()
 	private var modelForDisplay: [MainHomeModel.ViewModel.Hour] = []
+	private lazy var buttonLeft =  createButtonWithImage(systemName: "chevron.right")
+	private lazy var buttonRight =  createButtonWithImage(systemName: "chevron.left")
 
 	// MARK: - Initializator
 	override init(frame: CGRect) {
@@ -42,8 +44,13 @@ final class TodayCollectionView: UIView {
 private extension TodayCollectionView {
 	/// Добавление элементов UIView в Controller.
 	func addUIView() {
-		addSubview(labelTitle)
-		addSubview(collectionTodayTemp)
+		let views: [UIView] = [
+			labelTitle,
+			collectionTodayTemp,
+			buttonLeft,
+			buttonRight
+		]
+		views.forEach(addSubview)
 	}
 }
 
@@ -62,6 +69,11 @@ private extension TodayCollectionView {
 		labelTitle.text = "Today"
 		labelTitle.textAlignment = .left
 		labelTitle.font = FontsStyle.poppinsMedium(20).font
+
+		buttonLeft.addTarget(self, action: #selector(movingLeft), for: .touchUpInside)
+
+		buttonRight.isHidden = true
+		buttonRight.addTarget(self, action: #selector(movingRight), for: .touchUpInside)
 	}
 }
 
@@ -83,6 +95,18 @@ private extension TodayCollectionView {
 			title.width.equalTo(collectionTodayTemp.snp.width).dividedBy(2)
 			title.height.equalTo(30)
 		}
+
+		buttonLeft.snp.makeConstraints { buttonNext in
+			buttonNext.width.height.equalTo(20)
+			buttonNext.right.equalToSuperview().inset(5)
+			buttonNext.top.equalTo(collectionTodayTemp.snp.top).inset(28)
+		}
+
+		buttonRight.snp.makeConstraints { buttonNext in
+			buttonNext.width.height.equalTo(20)
+			buttonNext.left.equalToSuperview().inset(5)
+			buttonNext.top.equalTo(collectionTodayTemp.snp.top).inset(28)
+		}
 	}
 }
 
@@ -93,15 +117,7 @@ extension TodayCollectionView: UICollectionViewDelegateFlowLayout {
 		layout collectionViewLayout: UICollectionViewLayout,
 		sizeForItemAt indexPath: IndexPath
 	) -> CGSize {
-		CGSize(width: 76, height: 152)
-	}
-
-	func collectionView(
-		_ collectionView: UICollectionView,
-		layout collectionViewLayout: UICollectionViewLayout,
-		insetForSectionAt section: Int
-	) -> UIEdgeInsets {
-		return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+		CGSize(width: 76, height: 106)
 	}
 }
 
@@ -127,6 +143,18 @@ extension TodayCollectionView: UICollectionViewDataSource, UICollectionViewDeleg
 		}
 		return UICollectionViewCell()
 	}
+
+	func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+		let item = checkIndexPath()
+
+		guard let currentItem = item else { return }
+		let nextItem = IndexPath(item: currentItem.item - 1, section: 0)
+		if nextItem.item > 1 {
+			showButton()
+		} else {
+			hideButton()
+		}
+	}
 }
 
 // - MARK: Fabric UIElement.
@@ -149,5 +177,59 @@ private extension TodayCollectionView {
 		label.textColor = UIColor.white
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
+	}
+
+	func createButtonWithImage(systemName: String) -> UIButton {
+		let button = UIButton()
+		let configuration = UIImage.SymbolConfiguration(textStyle: .title1)
+		let image = UIImage(systemName: systemName, withConfiguration: configuration)
+		button.setImage(image, for: .normal)
+		button.tintColor = UIColor(hex: "#622FB5")
+		button.translatesAutoresizingMaskIntoConstraints = false
+
+		return button
+	}
+}
+
+// MARK: - UI Action
+private extension TodayCollectionView {
+	@objc func movingLeft() {
+		let item = checkIndexPath()
+
+		guard let currentItem = item else { return }
+		let nextItem = IndexPath(item: currentItem.item + 1, section: 0)
+		if nextItem.row < modelForDisplay.count {
+			self.collectionTodayTemp.scrollToItem(at: nextItem, at: .left, animated: true)
+		}
+
+		if nextItem.row >= 1 {
+			showButton()
+		}
+	}
+
+	@objc func movingRight() {
+		let item = checkIndexPath()
+		guard let currentItem = item else { return }
+		let nextItem = IndexPath(item: currentItem.item - 1, section: 0)
+		if nextItem.row < modelForDisplay.count && nextItem.row > 0 {
+			self.collectionTodayTemp.scrollToItem(at: nextItem, at: .right, animated: true)
+		}
+		if nextItem.row <= 1 {
+			hideButton()
+		}
+	}
+
+	func checkIndexPath() -> IndexPath? {
+		let visibleItems = collectionTodayTemp.indexPathsForVisibleItems as NSArray
+		let item = visibleItems.object(at: 0) as? IndexPath
+		return item
+	}
+
+	func hideButton() {
+		buttonRight.isHidden = true
+	}
+
+	func showButton() {
+		buttonRight.isHidden = false
 	}
 }

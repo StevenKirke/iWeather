@@ -99,22 +99,23 @@ private extension MainHomeViewController {
 	/// Верстка элементов UI.
 	/// - Note: Добавление constraints для UIView элементов.
 	func setupLayout() {
-		collectionCities.snp.makeConstraints { citiesView in
-			citiesView.bottom.equalTo(collectionTodayTemp.snp.top).inset(-63)
-			citiesView.left.right.equalToSuperview().inset(25)
-			citiesView.height.equalTo(215)
-		}
-
-		collectionTodayTemp.snp.makeConstraints { todayTempView in
-			todayTempView.bottom.equalToSuperview().inset(91)
-			todayTempView.left.right.equalToSuperview()
-			todayTempView.height.equalTo(152)
-		}
 
 		headerView.snp.makeConstraints { viewBack in
 			viewBack.top.equalToSuperview()
 			viewBack.left.right.equalToSuperview()
 			viewBack.height.equalTo(381)
+		}
+
+		collectionCities.snp.makeConstraints { citiesView in
+			citiesView.top.equalTo(headerView.snp.bottom).inset(-30)
+			citiesView.left.right.equalToSuperview().inset(25)
+			citiesView.height.equalTo(215)
+		}
+
+		collectionTodayTemp.snp.makeConstraints { todayTempView in
+			todayTempView.top.equalTo(collectionCities.snp.bottom).inset(-60)
+			todayTempView.left.right.equalToSuperview()
+			todayTempView.height.equalTo(106)
 		}
 
 		buttonIPerson.snp.makeConstraints { buttonPerson in
