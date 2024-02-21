@@ -9,6 +9,8 @@ import Foundation
 
 protocol IMainHomePresenter: AnyObject {
 	func presentCities(response: MainHomeModel.Request)
+
+	func showProfileView()
 }
 
 final class MainHomePresenter {
@@ -16,12 +18,16 @@ final class MainHomePresenter {
 	// MARK: - Public properties
 
 	// MARK: - Dependencies
-
+	private var mainHomeAlertDelegate: IMainHomeAlertDelegate?
 	// MARK: - Private properties
 
 	// MARK: - Initializator
-	internal init(viewController: IMainHomeViewLogic?) {
+	internal init(
+		viewController: IMainHomeViewLogic?,
+		mainHomeAlertDelegate: IMainHomeAlertDelegate?
+	) {
 		self.viewController = viewController
+		self.mainHomeAlertDelegate = mainHomeAlertDelegate
 	}
 
 	// MARK: - Lifecycle
@@ -46,8 +52,12 @@ extension MainHomePresenter: IMainHomePresenter {
 			let model = convertInModelListHours(responseModel: hours)
 			viewController?.renderHour(viewModel: model)
 		case .failure(let error):
-			print("Error \(error)")
+			mainHomeAlertDelegate?.showAlertView(massage: error.localizedDescription)
 		}
+	}
+
+	func showProfileView() {
+		mainHomeAlertDelegate?.showAlertView(massage: "Hell world.")
 	}
 }
 

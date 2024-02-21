@@ -21,6 +21,8 @@ protocol IMainHomeIterator: AnyObject {
 	func fetchTemperatureForCity(coordinate: RCoordinate, response: @escaping (Result<(Int, String), Error>) -> Void)
 
 	func fetchCurrentLocation(coordinate: MainHomeModel.Response.Coordinate?)
+
+	func showProfileView()
 }
 
 final class MainHomeIterator {
@@ -99,6 +101,10 @@ extension MainHomeIterator: IMainHomeIterator {
 				}
 			}
 		}
+	}
+
+	func showProfileView() {
+		presenter?.showProfileView()
 	}
 }
 

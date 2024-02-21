@@ -17,7 +17,7 @@ final class HeaderView: UIView {
 
 	// MARK: - Private properties
 	private lazy var headerView = createView()
-	private lazy var imageBackground = createImage()
+	private lazy var imageBackground = createImageView()
 	private lazy var gradient = createGradient()
 
 	private lazy var labelNameCity = createUILabel()
@@ -29,8 +29,6 @@ final class HeaderView: UIView {
 	private lazy var labelDetail = createUILabel()
 
 	private lazy var imageIcon = createSystemImage()
-
-	private lazy var imageIconWeather = createImageIconWeather()
 
 	private var currentFrame: CGSize = .zero
 
@@ -81,7 +79,6 @@ private extension HeaderView {
 		let views: [UIView] = [
 			headerView,
 			imageBackground,
-			imageIconWeather,
 			labelData,
 			labelNameCity,
 			labelTemperature,
@@ -99,6 +96,8 @@ private extension HeaderView {
 	func setupConfiguration() {
 		headerView.backgroundColor = UIColor.clear
 
+		imageBackground.layer.cornerRadius = 30
+		imageBackground.clipsToBounds = true
 		imageBackground.layer.insertSublayer(gradient, at: 0)
 
 		labelNameCity.font = FontsStyle.poppinsBold(28).font
@@ -172,30 +171,13 @@ private extension HeaderView {
 			detail.height.equalTo(20)
 			detail.width.equalTo(10)
 		}
-
-		imageIconWeather.snp.makeConstraints { iconWeather in
-			iconWeather.width.height.equalTo(50)
-			iconWeather.top.equalTo(headerView.snp.top).inset(25)
-			iconWeather.left.equalTo(headerView.snp.left).inset(25)
-		}
 	}
 }
 
 // - MARK: Fabric UI Element.
 private extension HeaderView {
-	func createImage() -> UIImageView {
+	func createImageView() -> UIImageView {
 		let image = UIImage(named: "ImageForHeader/nightForHeader")
-		let imageView = UIImageView(image: image)
-		imageView.layer.cornerRadius = 30
-		imageView.clipsToBounds = true
-		imageView.contentMode = .scaleAspectFill
-		imageView.translatesAutoresizingMaskIntoConstraints = false
-
-		return imageView
-	}
-
-	func createImageIconWeather() -> UIImageView {
-		let image = UIImage(named: "Empty")
 		let imageView = UIImageView(image: image)
 		imageView.contentMode = .scaleAspectFill
 		imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -239,4 +221,5 @@ private extension HeaderView {
 
 		return imageView
 	}
+
 }

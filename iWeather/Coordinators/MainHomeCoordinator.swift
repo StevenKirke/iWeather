@@ -11,7 +11,7 @@ protocol IMainHomeCoordinator: ICoordinator {
 	func showMainScene()
 }
 
-protocol IMainHomeDelegate: AnyObject {
+protocol IMainHomeAlertDelegate: AnyObject {
 	func showAlertView(massage: String)
 }
 
@@ -38,12 +38,19 @@ final class MainHomeCoordinator: IMainHomeCoordinator {
 
 	func showMainScene() {
 		let assembler = MainHomeAssembler()
-		let mainHomeVC = assembler.configurator()
+		let mainHomeVC = assembler.configurator(mainHomeAlertDelegate: self)
 		navigateController.pushViewController(mainHomeVC, animated: true)
 	}
 }
 
-final class AlertView: UIViewController {
+extension MainHomeCoordinator: IMainHomeAlertDelegate {
+	func showAlertView(massage: String) {
+		let alertView = createAlertView(massage: massage)
+		navigateController.present(alertView, animated: true)
+	}
+}
+
+private extension MainHomeCoordinator {
 	func createAlertView(massage: String) -> UIAlertController {
 		let alert = UIAlertController(title: "Alert", message: massage, preferredStyle: .alert)
 		alert.addAction(UIAlertAction(title: "OK", style: .default))

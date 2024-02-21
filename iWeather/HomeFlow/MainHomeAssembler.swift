@@ -8,7 +8,7 @@
 import UIKit
 
 final class MainHomeAssembler {
-	func configurator() -> UIViewController {
+	func configurator(mainHomeAlertDelegate: IMainHomeAlertDelegate) -> UIViewController {
 		let networkManager = NetworkManager()
 		let decodeJSONManager = DecodeJsonManager()
 		let fileManager = WriteFileManager()
@@ -31,7 +31,9 @@ final class MainHomeAssembler {
 		)
 
 		let viewController = MainHomeViewController()
-		let presenter = MainHomePresenter(viewController: viewController)
+		let presenter = MainHomePresenter(
+			viewController: viewController, mainHomeAlertDelegate: mainHomeAlertDelegate
+		)
 		let iterator = MainHomeIterator(
 			presenter: presenter,
 			worker: worker,

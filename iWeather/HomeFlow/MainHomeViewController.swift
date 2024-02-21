@@ -26,6 +26,7 @@ final class MainHomeViewController: UIViewController {
 	private var collectionCities = CitiesCollectionView()
 	private var collectionTodayTemp = TodayCollectionView()
 	private lazy var headerView = HeaderView()
+	private lazy var buttonIPerson = createButtonWithImage()
 
 	private var isCurrentLocation = false
 
@@ -66,7 +67,8 @@ private extension MainHomeViewController {
 		let views: [UIView] = [
 			headerView,
 			collectionCities,
-			collectionTodayTemp
+			collectionTodayTemp,
+			buttonIPerson
 		]
 		views.forEach(view.addSubview)
 	}
@@ -76,10 +78,14 @@ private extension MainHomeViewController {
 private extension MainHomeViewController {
 	/// Настройка UI элементов
 	func setupConfiguration() {
+		navigationController?.setNavigationBarHidden(true, animated: false)
+
 		view.backgroundColor = UIColor(hex: "#431098")
 		collectionCities.translatesAutoresizingMaskIntoConstraints = false
 		collectionCities.handlerCoordinateDelegate = self
 		collectionTodayTemp.translatesAutoresizingMaskIntoConstraints = false
+
+		buttonIPerson.addTarget(self, action: #selector(self.showProfile), for: .touchUpInside)
 	}
 }
 
@@ -105,6 +111,12 @@ private extension MainHomeViewController {
 			viewBack.left.right.equalToSuperview()
 			viewBack.height.equalTo(381)
 		}
+
+		buttonIPerson.snp.makeConstraints { buttonPerson in
+			buttonPerson.top.equalTo(headerView.snp.topMargin).inset(-25)
+			buttonPerson.left.equalToSuperview().inset(25)
+			buttonPerson.width.height.equalTo(44)
+		}
 	}
 }
 
@@ -122,6 +134,17 @@ private extension MainHomeViewController {
 
 		return gradient
 	}
+
+	func createButtonWithImage() -> UIButton {
+		let button = UIButton()
+		let configuration = UIImage.SymbolConfiguration(textStyle: .title1)
+		let image = UIImage(systemName: "person.crop.circle", withConfiguration: configuration)
+		button.setImage(image, for: .normal)
+		button.tintColor = UIColor.white
+		button.translatesAutoresizingMaskIntoConstraints = false
+
+		return button
+	}
 }
 
 // MARK: - Action UI
@@ -134,6 +157,10 @@ private extension MainHomeViewController {
 
 	func getListCities() {
 		iterator?.fetchCityList()
+	}
+
+	@objc func showProfile() {
+		iterator?.showProfileView()
 	}
 }
 
