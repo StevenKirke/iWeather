@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  TemperatureDTO.swift
 //  iWeather
 //
 //  Created by Steven Kirke on 17.02.2024.
@@ -31,6 +31,7 @@ enum ConditionDTO: String, Codable {
 	case overcastAndWetSnow = "overcast-and-wet-snow"
 	case overcastAndLightSnow = "overcast-and-light-snow"
 	case cloudyAndSnow = "cloudy-and-snow"
+	case cloudyAndLightSnow = "cloudy-and-light-snow"
 }
 
 extension ConditionDTO {
@@ -58,7 +59,9 @@ extension ConditionDTO {
 		   case .overcastAndLightSnow:
 			   title = "Snow"
 		   case .cloudyAndSnow:
-				title = "Snow"
+			   title = "Snow"
+		   case .cloudyAndLightSnow:
+			   title = "Snow"
 		   }
 		   return title
 	   }
@@ -87,6 +90,8 @@ extension ConditionDTO {
 		   case .overcastAndLightSnow:
 			   title = "snow"
 		   case .cloudyAndSnow:
+			   title = "snow"
+		   case .cloudyAndLightSnow:
 			   title = "snow"
 		   }
 		   return title

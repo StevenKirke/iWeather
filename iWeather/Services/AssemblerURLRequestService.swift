@@ -14,7 +14,7 @@ protocol IAssemblerURLRequestService: AnyObject {
 
 final class AssemblerURLRequestService: IAssemblerURLRequestService {
 	func assemblerURLRequest(url: URL) -> URLRequest {
-		let token = "05830f3e-5ba7-4a1a-98f2-bc2cf5d7e3cf"
+		let token = "4d6abbab-31a4-4b3c-affe-f61463113343"
 
 		var request = URLRequest(url: url)
 		request.httpMethod = "GET"

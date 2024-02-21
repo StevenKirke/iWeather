@@ -23,6 +23,8 @@ protocol IMainHomeIterator: AnyObject {
 	func fetchCurrentLocation(coordinate: MainHomeModel.Response.Coordinate?)
 
 	func showProfileView()
+
+	func showMenuScene()
 }
 
 final class MainHomeIterator {
@@ -106,6 +108,10 @@ extension MainHomeIterator: IMainHomeIterator {
 	func showProfileView() {
 		presenter?.showProfileView()
 	}
+
+	func showMenuScene() {
+		presenter?.showMenuWScene()
+	}
 }
 
 // - MARK: Handler request cities.
@@ -170,7 +176,6 @@ private extension MainHomeIterator {
 	func transferHour(forecast: Forecast?) {
 		guard let currentForecast = forecast else { return }
 		guard let hours = self.convertorHourDTO?.convert(forecastDTO: currentForecast) else { return }
-
 		self.presenter?.presentCities(response: .successHours(hours))
 	}
 

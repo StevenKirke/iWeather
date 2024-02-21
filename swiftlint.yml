@@ -45,7 +45,7 @@ included:
 excluded:
   - Carthage
   - Pods
-  #- iWeather/Packages/SnapKit-develop
+  - iWeather/Packages/SnapKit-develop
 
 # список правил для анализа `swiftlint analyze` (experimental)
 analyzer_rules:

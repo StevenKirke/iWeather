@@ -8,7 +8,10 @@
 import UIKit
 
 final class MainHomeAssembler {
-	func configurator(mainHomeAlertDelegate: IMainHomeAlertDelegate) -> UIViewController {
+	func configurator(
+		mainHomeAlertDelegate: IMainHomeAlertDelegate,
+		mainHomeHendler: @escaping MainHomeClosure
+	) -> UIViewController {
 		let networkManager = NetworkManager()
 		let decodeJSONManager = DecodeJsonManager()
 		let fileManager = WriteFileManager()
@@ -32,7 +35,9 @@ final class MainHomeAssembler {
 
 		let viewController = MainHomeViewController()
 		let presenter = MainHomePresenter(
-			viewController: viewController, mainHomeAlertDelegate: mainHomeAlertDelegate
+			viewController: viewController,
+			mainHomeAlertDelegate: mainHomeAlertDelegate,
+			mainHomeClosure: mainHomeHendler
 		)
 		let iterator = MainHomeIterator(
 			presenter: presenter,

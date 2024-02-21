@@ -16,17 +16,16 @@ protocol IMainHomeViewLogic: AnyObject {
 
 final class MainHomeViewController: UIViewController {
 
-	// MARK: - Public properties
-
 	// MARK: - Dependencies
 	var iterator: IMainHomeIterator?
 	var handlerDelegate: ICitiesCoordinateHandler?
 
 	// MARK: - Private properties
-	private var collectionCities = CitiesCollectionView()
-	private var collectionTodayTemp = TodayCollectionView()
+	private lazy var collectionCities = CitiesCollectionView()
+	private lazy var collectionTodayTemp = TodayCollectionView()
 	private lazy var headerView = HeaderView()
-	private lazy var buttonIPerson = createButtonWithImage()
+	private lazy var buttonIPerson = createButtonWithImage(systemName: "person.crop.circle")
+	private lazy var buttonBurgerMenu = createButtonWithImage(systemName: "line.3.horizontal")
 
 	private var isCurrentLocation = false
 
@@ -68,7 +67,8 @@ private extension MainHomeViewController {
 			headerView,
 			collectionCities,
 			collectionTodayTemp,
-			buttonIPerson
+			buttonIPerson,
+			buttonBurgerMenu
 		]
 		views.forEach(view.addSubview)
 	}
@@ -86,6 +86,7 @@ private extension MainHomeViewController {
 		collectionTodayTemp.translatesAutoresizingMaskIntoConstraints = false
 
 		buttonIPerson.addTarget(self, action: #selector(self.showProfile), for: .touchUpInside)
+		buttonBurgerMenu.addTarget(self, action: #selector(self.nextMenuScene), for: .touchUpInside)
 	}
 }
 
@@ -117,6 +118,12 @@ private extension MainHomeViewController {
 			buttonPerson.left.equalToSuperview().inset(25)
 			buttonPerson.width.height.equalTo(44)
 		}
+
+		buttonBurgerMenu.snp.makeConstraints { buttonPerson in
+			buttonPerson.top.equalTo(headerView.snp.topMargin).inset(-25)
+			buttonPerson.right.equalToSuperview().inset(25)
+			buttonPerson.width.height.equalTo(44)
+		}
 	}
 }
 
@@ -135,10 +142,10 @@ private extension MainHomeViewController {
 		return gradient
 	}
 
-	func createButtonWithImage() -> UIButton {
+	func createButtonWithImage(systemName: String) -> UIButton {
 		let button = UIButton()
 		let configuration = UIImage.SymbolConfiguration(textStyle: .title1)
-		let image = UIImage(systemName: "person.crop.circle", withConfiguration: configuration)
+		let image = UIImage(systemName: systemName, withConfiguration: configuration)
 		button.setImage(image, for: .normal)
 		button.tintColor = UIColor.white
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -161,6 +168,10 @@ private extension MainHomeViewController {
 
 	@objc func showProfile() {
 		iterator?.showProfileView()
+	}
+
+	@objc func nextMenuScene() {
+		iterator?.showMenuScene()
 	}
 }
 

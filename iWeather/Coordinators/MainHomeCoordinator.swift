@@ -38,8 +38,16 @@ final class MainHomeCoordinator: IMainHomeCoordinator {
 
 	func showMainScene() {
 		let assembler = MainHomeAssembler()
-		let mainHomeVC = assembler.configurator(mainHomeAlertDelegate: self)
+		let mainHomeVC = assembler.configurator(
+			mainHomeAlertDelegate: self,
+			mainHomeHendler: handlerResult)
 		navigateController.pushViewController(mainHomeVC, animated: true)
+	}
+}
+
+private extension MainHomeCoordinator {
+	func handlerResult() {
+		finish()
 	}
 }
 

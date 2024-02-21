@@ -11,6 +11,7 @@ import UIKit
 
 protocol IAppCoordinator: ICoordinator {
 	func showHomeFlow()
+	func showMenuFlow()
 }
 
 final class AppCoordinator: IAppCoordinator {
@@ -33,6 +34,14 @@ final class AppCoordinator: IAppCoordinator {
 
 	func showHomeFlow() {
 		let coordinator = MainHomeCoordinator(navigateController: navigateController)
+		childCoordinators.append(coordinator)
+		coordinator.finishDelegate = self
+		coordinator.start()
+	}
+
+	func showMenuFlow() {
+		let coordinator = MainMenuCoordinator(navigateController: navigateController)
+		childCoordinators.append(coordinator)
 		coordinator.finishDelegate = self
 		coordinator.start()
 	}
@@ -43,6 +52,7 @@ extension AppCoordinator: ICoordinatorFinishDelegate {
 		switch coordinator {
 		case is IMainHomeCoordinator:
 			childCoordinators.removeAll()
+			showMenuFlow()
 		default:
 			break
 		}

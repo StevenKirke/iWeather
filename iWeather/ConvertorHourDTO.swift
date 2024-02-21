@@ -22,7 +22,7 @@ private extension ConvertorHourDTO {
 		var convertHours: [MainHomeModel.Request.Hour] = []
 		if let currentDay = forecastDTO, let hours = currentDay.hours {
 			convertHours = hours.map {
-				convertHour(modelRequest: $0)
+				return convertHour(modelRequest: $0)
 			}
 		}
 		return convertHours

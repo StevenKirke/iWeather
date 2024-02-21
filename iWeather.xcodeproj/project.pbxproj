@@ -16,6 +16,9 @@
 		325B38DD2B84DF3B00A3BAE0 /* ConvertorWeatherForLocationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38DC2B84DF3B00A3BAE0 /* ConvertorWeatherForLocationDTO.swift */; };
 		325B38DF2B85003700A3BAE0 /* ConvertorCityDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38DE2B85003700A3BAE0 /* ConvertorCityDTO.swift */; };
 		325B38E12B85441400A3BAE0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 325B38E02B85441400A3BAE0 /* README.md */; };
+		325B38E32B86132300A3BAE0 /* MainMenuCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38E22B86132300A3BAE0 /* MainMenuCoordinator.swift */; };
+		325B38E82B8613DE00A3BAE0 /* MainMenuAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38E72B8613DE00A3BAE0 /* MainMenuAssembler.swift */; };
+		325B38EA2B86140D00A3BAE0 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325B38E92B86140D00A3BAE0 /* MainMenuViewController.swift */; };
 		32B7A9832B7BDD3000537E72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9822B7BDD3000537E72 /* AppDelegate.swift */; };
 		32B7A9852B7BDD3000537E72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9842B7BDD3000537E72 /* SceneDelegate.swift */; };
 		32B7A98C2B7BDD3100537E72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32B7A98B2B7BDD3100537E72 /* Assets.xcassets */; };
@@ -38,7 +41,7 @@
 		32B7A9CB2B7FE43300537E72 /* AssemblerURLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9CA2B7FE43300537E72 /* AssemblerURLService.swift */; };
 		32B7A9CD2B7FF37200537E72 /* WriteFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9CC2B7FF37200537E72 /* WriteFileManager.swift */; };
 		32B7A9CE2B7FFBBF00537E72 /* CitiesMock.json in Resources */ = {isa = PBXBuildFile; fileRef = 32B7A9C52B7FCD9400537E72 /* CitiesMock.json */; };
-		32B7A9D02B80C94600537E72 /* TempretarureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9CF2B80C94600537E72 /* TempretarureDTO.swift */; };
+		32B7A9D02B80C94600537E72 /* TemperatureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9CF2B80C94600537E72 /* TemperatureDTO.swift */; };
 		32B7A9D22B80DFEF00537E72 /* AssemblerURLRequestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9D12B80DFEF00537E72 /* AssemblerURLRequestService.swift */; };
 		32B7A9D42B810E0200537E72 /* CitiesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9D32B810E0200537E72 /* CitiesCollectionView.swift */; };
 		32B7A9F12B811FD900537E72 /* CellForCities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B7A9F02B811FD900537E72 /* CellForCities.swift */; };
@@ -77,6 +80,9 @@
 		325B38DC2B84DF3B00A3BAE0 /* ConvertorWeatherForLocationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertorWeatherForLocationDTO.swift; sourceTree = "<group>"; };
 		325B38DE2B85003700A3BAE0 /* ConvertorCityDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertorCityDTO.swift; sourceTree = "<group>"; };
 		325B38E02B85441400A3BAE0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		325B38E22B86132300A3BAE0 /* MainMenuCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuCoordinator.swift; sourceTree = "<group>"; };
+		325B38E72B8613DE00A3BAE0 /* MainMenuAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuAssembler.swift; sourceTree = "<group>"; };
+		325B38E92B86140D00A3BAE0 /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		32B7A97F2B7BDD3000537E72 /* iWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32B7A9822B7BDD3000537E72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		32B7A9842B7BDD3000537E72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,7 +106,7 @@
 		32B7A9C52B7FCD9400537E72 /* CitiesMock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CitiesMock.json; sourceTree = "<group>"; };
 		32B7A9CA2B7FE43300537E72 /* AssemblerURLService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssemblerURLService.swift; sourceTree = "<group>"; };
 		32B7A9CC2B7FF37200537E72 /* WriteFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteFileManager.swift; sourceTree = "<group>"; };
-		32B7A9CF2B80C94600537E72 /* TempretarureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempretarureDTO.swift; sourceTree = "<group>"; };
+		32B7A9CF2B80C94600537E72 /* TemperatureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureDTO.swift; sourceTree = "<group>"; };
 		32B7A9D12B80DFEF00537E72 /* AssemblerURLRequestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssemblerURLRequestService.swift; sourceTree = "<group>"; };
 		32B7A9D32B810E0200537E72 /* CitiesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesCollectionView.swift; sourceTree = "<group>"; };
 		32B7A9EA2B8114C800537E72 /* SnapKit-develop */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "SnapKit-develop"; sourceTree = "<group>"; };
@@ -147,6 +153,23 @@
 				325B38DE2B85003700A3BAE0 /* ConvertorCityDTO.swift */,
 			);
 			name = ConvertersDTO;
+			sourceTree = "<group>";
+		};
+		325B38E52B86137100A3BAE0 /* MenuFlow */ = {
+			isa = PBXGroup;
+			children = (
+				325B38E62B8613A600A3BAE0 /* MainMenuScene */,
+			);
+			name = MenuFlow;
+			sourceTree = "<group>";
+		};
+		325B38E62B8613A600A3BAE0 /* MainMenuScene */ = {
+			isa = PBXGroup;
+			children = (
+				325B38E72B8613DE00A3BAE0 /* MainMenuAssembler.swift */,
+				325B38E92B86140D00A3BAE0 /* MainMenuViewController.swift */,
+			);
+			path = MainMenuScene;
 			sourceTree = "<group>";
 		};
 		32B7A9762B7BDD3000537E72 = {
@@ -211,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				32B7A99F2B7BDF2E00537E72 /* HomeFlow */,
+				325B38E52B86137100A3BAE0 /* MenuFlow */,
 			);
 			name = Flows;
 			sourceTree = "<group>";
@@ -220,6 +244,7 @@
 			children = (
 				32B7A9AE2B7D266900537E72 /* Common */,
 				32B7A9B32B7D26C100537E72 /* MainHomeCoordinator.swift */,
+				325B38E22B86132300A3BAE0 /* MainMenuCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -270,9 +295,9 @@
 		32B7A9AE2B7D266900537E72 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				32B7A9AC2B7D263300537E72 /* AppCoordinator.swift */,
 				32B7A9AF2B7D268200537E72 /* ICoordinator.swift */,
 				32B7A9B12B7D26A200537E72 /* ICoordinatorDelegate.swift */,
-				32B7A9AC2B7D263300537E72 /* AppCoordinator.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -292,7 +317,7 @@
 			children = (
 				32B7A9BF2B7F94F500537E72 /* MainHomeWorker.swift */,
 				32B7A9C22B7FB78B00537E72 /* SitiesDTO.swift */,
-				32B7A9CF2B80C94600537E72 /* TempretarureDTO.swift */,
+				32B7A9CF2B80C94600537E72 /* TemperatureDTO.swift */,
 				32B7AA002B8223F200537E72 /* WeatherDTO.swift */,
 			);
 			name = Worker;
@@ -526,6 +551,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				325B38EA2B86140D00A3BAE0 /* MainMenuViewController.swift in Sources */,
 				32B7A9A82B7BDFCC00537E72 /* MainHomePresenter.swift in Sources */,
 				32B7A9A62B7BDFC000537E72 /* MainHomeIterator.swift in Sources */,
 				32B7A9C32B7FB78B00537E72 /* SitiesDTO.swift in Sources */,
@@ -534,6 +560,7 @@
 				32B7A9BC2B7E703700537E72 /* NetworkManager.swift in Sources */,
 				32B7A9BA2B7E701800537E72 /* DecodeJSONManager.swift in Sources */,
 				32B7A9B02B7D268200537E72 /* ICoordinator.swift in Sources */,
+				325B38E32B86132300A3BAE0 /* MainMenuCoordinator.swift in Sources */,
 				32B7AA032B826B7900537E72 /* TimeConvertServices.swift in Sources */,
 				32B7A9832B7BDD3000537E72 /* AppDelegate.swift in Sources */,
 				32B7A9FF2B8159F200537E72 /* CellForToday.swift in Sources */,
@@ -548,12 +575,13 @@
 				32B7AA012B8223F200537E72 /* WeatherDTO.swift in Sources */,
 				32B7A9C02B7F94F500537E72 /* MainHomeWorker.swift in Sources */,
 				32B7AA092B834EA500537E72 /* HeaderView.swift in Sources */,
+				325B38E82B8613DE00A3BAE0 /* MainMenuAssembler.swift in Sources */,
 				32B7A9A22B7BDFA900537E72 /* MainHomeAssembler.swift in Sources */,
 				32B7A9CD2B7FF37200537E72 /* WriteFileManager.swift in Sources */,
 				32B7A9FD2B8159DC00537E72 /* TodayCollectionView.swift in Sources */,
 				32B7A9D22B80DFEF00537E72 /* AssemblerURLRequestService.swift in Sources */,
 				32B7A9CB2B7FE43300537E72 /* AssemblerURLService.swift in Sources */,
-				32B7A9D02B80C94600537E72 /* TempretarureDTO.swift in Sources */,
+				32B7A9D02B80C94600537E72 /* TemperatureDTO.swift in Sources */,
 				325B38DD2B84DF3B00A3BAE0 /* ConvertorWeatherForLocationDTO.swift in Sources */,
 				32B7A9852B7BDD3000537E72 /* SceneDelegate.swift in Sources */,
 				325B38D32B84AFD300A3BAE0 /* GlobalStyles.swift in Sources */,

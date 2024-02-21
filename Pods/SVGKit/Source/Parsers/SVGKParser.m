@@ -68,7 +68,7 @@ static NSMutableDictionary *NSDictionaryFromLibxmlAttributes (const xmlChar **at
  attach a "context" object to libxml parser - and without that, you can't actually
  parse, because you have no reference to the context of your original "parse" call. ARGH!
  */
-SVGKParser* getCurrentlyParsingParser()
+SVGKParser* getCurrentlyParsingParser(void)
 {
 	/** Currently implemented NON THREAD SAFE using a static varailbe that only
 	 allows one parse in memory at a time:

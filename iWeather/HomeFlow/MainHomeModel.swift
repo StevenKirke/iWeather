@@ -179,13 +179,16 @@ extension MainHomeModel.ViewModel.Hour {
 	}
 
 	private static func convertHour(hour: String) -> String {
-		let dateFormate = DateFormatter()
-		let fullTime = "\(hour):00:00"
-		dateFormate.dateFormat = "HH:mm:ss"
-		let convertInDate = dateFormate.date(from: fullTime)
+		if let currentHour = Int(hour) {
+			let dateFormate = DateFormatter()
+			let fullTime = "\(currentHour):00:00"
+			dateFormate.dateFormat = "HH:mm:ss"
+			let convertInDate = dateFormate.date(from: fullTime)
 
-		dateFormate.dateFormat = "hh:mm a"
-		let string = dateFormate.string(from: convertInDate!)
-		return string
+			dateFormate.dateFormat = "hh:mm a"
+			let string = dateFormate.string(from: convertInDate!)
+			return string
+		}
+		return hour
 	}
 }

@@ -12,7 +12,7 @@
 ##### * "Экран с зеленой плашкой".
 
 ## Getting started
-#####
+##### Запустить файл iWeather.xcworkspace.
 
 ## Usage
 ####
@@ -50,33 +50,38 @@
 │   │   │   ├── AssemblerURLRequestService.swift
 │   │   │   └── TimeConvertServices.swift
 │   │   ├── Coordinators
-│   │   │   │── Common
+│   │   │   ├── Common
 │   │   │   │   ├── ICoordinator.swift
 │   │   │   │   ├── ICoordinatorDelegate.swift
 │   │   │   │   └── AppCoordinator.swift
-│   │   │   └── MainHomeCoordinator.swift
+│   │   │   ├── MainHomeCoordinator.swift
+│   │   │   └── MainMenuCoordinator.swift
 │   │   ├── Flows
-│   │   │   └── MainFlow
-│   │   │       └── MainHomeScene
-│   │   │           ├── MainHomeAssembler.swift
-│   │   │           ├── MainHomeViewController.swift
-│   │   │           ├── MainHomeIterator.swift
-│   │   │           ├── MainHomePresenter.swift
-│   │   │           ├── MainHomeViewModel.swift
-│   │   │           ├── AdditionalView
-│   │   │           │     ├── HeaderView
-│   │   │           │     │      └── HeaderView.swift
-│   │   │           │     ├── CitiesCollectionView
-│   │   │           │     │      ├── CitiesCollectionView.swift
-│   │   │           │     │      └── CellForCities.swift
-│   │   │           │     └── TodayCollectionView
-│   │   │           │            ├── TodayCollectionView.swift
-│   │   │           │            └── CellForToday.swift
-│   │   │           └── Worker
-│   │   │                 ├── MainHomeWorker.swift
-│   │   │                 ├── SitiesDTO.swift
-│   │   │                 ├── TempretarureDTO.swift
-│   │   │                 └── WeatherDTO.swift
+│   │   │   ├── MainFlow
+│   │   │   │   └── MainHomeScene
+│   │   │   │       ├── MainHomeAssembler.swift
+│   │   │   │       ├── MainHomeViewController.swift
+│   │   │   │       ├── MainHomeIterator.swift
+│   │   │   │       ├── MainHomePresenter.swift
+│   │   │   │       ├── MainHomeViewModel.swift
+│   │   │   │       ├── AdditionalView
+│   │   │   │       │     ├── HeaderView
+│   │   │   │       │     │      └── HeaderView.swift
+│   │   │   │       │     ├── CitiesCollectionView
+│   │   │   │       │     │      ├── CitiesCollectionView.swift
+│   │   │   │       │     │      └── CellForCities.swift
+│   │   │   │       │     └── TodayCollectionView
+│   │   │   │       │            ├── TodayCollectionView.swift
+│   │   │   │       │            └── CellForToday.swift
+│   │   │   │       └── Worker
+│   │   │   │             ├── MainHomeWorker.swift
+│   │   │   │             ├── SitiesDTO.swift
+│   │   │   │             ├── TemperatureDTO.swift
+│   │   │   │             └── WeatherDTO.swift
+│   │   │   └── MenuFlow
+│   │   │       └── MainMenuScene
+│   │   │           ├── MainMenuAssembler.swift
+│   │   │           └── MainMenuViewController.swift
 │   │   ├── Application
 │   │   │   ├── AppDelegate.swift
 │   │   │   └── SceneDelegate.swift

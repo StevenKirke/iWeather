@@ -102,7 +102,7 @@ private extension CellForCities {
 		gradient.startPoint = CGPoint(x: 0.5, y: 0.1)
 		gradient.endPoint = CGPoint(x: 0.5, y: 0.9)
 		gradient.colors = colours
-		gradient.opacity = 0.6
+		gradient.opacity = 0.2
 		return gradient
 	}
 

@@ -81,6 +81,8 @@ extension MainHomeWorker: IMainHomeWorker {
 		}
 	}
 
+	// Запрос списка городов.
+	// Метод отключен так как есть лимит запросов в сутки. Вместо него используется Mock файл.
 	func fetchData() {
 //		let citiesURL = assemblerURL?.assemblerUlRsCities()
 //		print(citiesURL)
@@ -106,11 +108,10 @@ extension MainHomeWorker: IMainHomeWorker {
 		}
 	}
 
-	func fetchWeather<
-		T: Decodable>(coordinates: RCoordinate, model: T.Type, response: @escaping (Result<T, Error>) -> Void
-	) {
+	func fetchWeather<T: Decodable>(
+		coordinates: RCoordinate, model: T.Type, response: @escaping (Result<T, Error>) -> Void
+		) {
 		let url = assemblerURL?.assemblerUlRsTemperature(lat: coordinates.latitude, lon: coordinates.longitude)
-
 		guard let currentURL = url else { return }
 
 		let requestURL = assemblerRequestURL?.assemblerURLRequest(url: currentURL)
@@ -119,19 +120,19 @@ extension MainHomeWorker: IMainHomeWorker {
 		networkManager?.getData(request: currentRequestURL) { result in
 			switch result {
 			case .success(let data):
-					self.decodeData(data: data, model: model) { resultJSON in
+				self.decodeData(data: data, model: model) { resultJSON in
 				switch resultJSON {
-				case .success(let json):
-					response(.success(json))
-				case .failure(let error):
-					response(.failure(error))
+					case .success(let json):
+						response(.success(json))
+					case .failure(let error):
+						response(.failure(error))
+					}
 				}
-			}
 			case .failure(let error):
 				response(.failure(error))
 			}
 		}
-		}
+	}
 }
 
 // - MARK: Decode JSON
