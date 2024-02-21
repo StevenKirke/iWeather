@@ -56,6 +56,11 @@ final class MainHomeViewController: UIViewController {
 		setupLayout()
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		navigationController?.setNavigationBarHidden(true, animated: false)
+	}
+
 	// MARK: - Private methods
 }
 
@@ -78,7 +83,6 @@ private extension MainHomeViewController {
 private extension MainHomeViewController {
 	/// Настройка UI элементов
 	func setupConfiguration() {
-		navigationController?.setNavigationBarHidden(true, animated: false)
 
 		view.backgroundColor = UIColor(hex: "#431098")
 		collectionCities.translatesAutoresizingMaskIntoConstraints = false
@@ -114,13 +118,13 @@ private extension MainHomeViewController {
 		}
 
 		buttonIPerson.snp.makeConstraints { buttonPerson in
-			buttonPerson.top.equalTo(headerView.snp.topMargin).inset(-25)
+			buttonPerson.top.equalTo(headerView.snp.topMargin).inset(-20)
 			buttonPerson.left.equalToSuperview().inset(25)
 			buttonPerson.width.height.equalTo(44)
 		}
 
 		buttonBurgerMenu.snp.makeConstraints { buttonPerson in
-			buttonPerson.top.equalTo(headerView.snp.topMargin).inset(-25)
+			buttonPerson.top.equalTo(headerView.snp.topMargin).inset(-20)
 			buttonPerson.right.equalToSuperview().inset(25)
 			buttonPerson.width.height.equalTo(44)
 		}
